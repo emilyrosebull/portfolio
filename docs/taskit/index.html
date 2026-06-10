@@ -1,0 +1,2185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Task It</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #ECEAE3;
+  color: #1A1A18;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+:root {
+  --primary:    #0C447C;
+  --navy:       #042C53;
+  --mid-blue:   #185FA5;
+  --amber:      #EF9F27;
+  --amber-dark: #412402;
+  --amber-bg:   #FAEEDA;
+  --blue-light: #E6F1FB;
+  --blue-border:#B5D4F4;
+  --bg:         #FFFFFF;
+  --bg-2:       #F5F4F0;
+  --text:       #1A1A18;
+  --text-2:     #6B6A64;
+  --border:     #E0DED7;
+  --r-lg:       10px;
+  --r-md:       6px;
+}
+
+/* ── App chrome ── */
+.app-header {
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+  height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+.app-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.app-logo-mark {
+  width: 24px; height: 24px;
+  border-radius: 6px;
+  background: var(--amber);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--amber-dark); font-size: 13px;
+}
+
+.mode-tabs {
+  display: flex;
+  background: var(--bg-2);
+  border-radius: 8px;
+  padding: 3px;
+  gap: 2px;
+}
+
+.mode-tab {
+  padding: 5px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-2);
+  cursor: pointer;
+  border: none;
+  background: none;
+  transition: all 0.15s;
+  display: flex; align-items: center; gap: 5px;
+}
+
+.mode-tab.active {
+  background: #fff;
+  color: var(--primary);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.app-body { padding: 32px 24px; }
+
+.mode-view { display: none; }
+.mode-view.active { display: block; }
+
+/* ── Mobile layout ── */
+.mobile-stage {
+  display: flex;
+  justify-content: center;
+  gap: 36px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+/* ── Phone frame ── */
+.phone-frame {
+  width: 304px;
+  border-radius: 34px;
+  border: 6px solid var(--navy);
+  overflow: hidden;
+  background: var(--bg);
+  box-shadow: 0 20px 60px rgba(4,44,83,0.28), 0 4px 16px rgba(0,0,0,0.12);
+  flex-shrink: 0;
+}
+
+.phone-status {
+  background: var(--primary);
+  padding: 10px 18px 8px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.phone-status span { font-size: 11px; color: rgba(255,255,255,0.8); font-weight: 500; }
+
+.phone-topbar {
+  background: var(--primary);
+  padding: 8px 16px 14px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+
+.phone-logo {
+  font-size: 14px; font-weight: 600; color: #fff;
+  display: flex; align-items: center; gap: 7px;
+}
+
+.phone-logo-mark {
+  width: 20px; height: 20px;
+  border-radius: 5px;
+  background: var(--amber);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--amber-dark); font-size: 11px;
+}
+
+.accent-bar { height: 3px; background: var(--amber); }
+
+.avatar {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--amber);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 600; color: var(--amber-dark);
+  flex-shrink: 0;
+}
+
+.phone-body {
+  padding: 16px;
+  height: 410px;
+  overflow: hidden;
+  background: var(--bg);
+  position: relative;
+}
+
+.phone-tab { display: none; }
+.phone-tab.active { display: block; }
+
+.phone-nav {
+  background: var(--navy);
+  display: flex; justify-content: space-around;
+  padding: 10px 0 14px;
+}
+
+.phone-nav-item {
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  font-size: 10px; color: rgba(255,255,255,0.45);
+  cursor: pointer;
+  padding: 4px 14px;
+  border-radius: 8px;
+  transition: color 0.15s;
+}
+.phone-nav-item i { font-size: 20px; }
+.phone-nav-item.active { color: var(--amber); }
+
+/* Phone UI components */
+.phone-greeting { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+.phone-subtext  { font-size: 11px; color: var(--text-2); margin-bottom: 14px; }
+
+.phone-stats { display: flex; gap: 8px; margin-bottom: 14px; }
+.phone-stat { flex: 1; background: var(--bg-2); border-radius: var(--r-md); padding: 10px 12px; }
+.phone-stat-label { font-size: 10px; color: var(--text-2); margin-bottom: 2px; }
+.phone-stat-val { font-size: 20px; font-weight: 600; color: var(--text); }
+.phone-stat-val.blue { color: var(--primary); }
+
+.phone-section { font-size: 11px; font-weight: 600; color: var(--text-2); letter-spacing: 0.06em; text-transform: uppercase; margin: 0 0 8px; }
+
+.phone-card {
+  background: var(--bg);
+  border: 0.5px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 8px 12px;
+  margin-bottom: 10px;
+}
+
+.phone-task {
+  display: flex; align-items: center; gap: 9px;
+  padding: 7px 0;
+  border-bottom: 0.5px solid var(--border);
+  cursor: pointer;
+  user-select: none;
+}
+.phone-task:last-child { border-bottom: none; }
+
+.phone-check {
+  width: 16px; height: 16px;
+  border-radius: 4px;
+  border: 1.5px solid var(--border);
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+}
+.phone-check.done { background: var(--primary); border-color: var(--primary); }
+
+.task-label { font-size: 12px; color: var(--text); flex: 1; transition: all 0.15s; line-height: 1.3; }
+.task-label.done { color: var(--text-2); text-decoration: line-through; }
+
+.phone-pts {
+  font-size: 10px; padding: 2px 7px;
+  border-radius: 999px;
+  background: var(--amber-bg); color: #633806; font-weight: 600; flex-shrink: 0;
+}
+
+.badge { font-size: 10px; padding: 2px 7px; border-radius: 999px; font-weight: 600; flex-shrink: 0; white-space: nowrap; }
+.badge-navy   { background: var(--navy); color: var(--blue-border); }
+.badge-blue   { background: var(--blue-light); color: var(--primary); font-size: 11px; }
+.badge-amber  { background: var(--amber-bg); color: #633806; font-size: 11px; }
+.badge-gray   { background: #F1EFE8; color: #444441; font-size: 11px; }
+.badge-green  { background: #DCFCE7; color: #166534; font-size: 11px; }
+
+/* Goals tab */
+.goal-item { padding: 10px 0; border-bottom: 0.5px solid var(--border); cursor: pointer; }
+.goal-item:last-child { border-bottom: none; }
+.goal-header { display: flex; align-items: center; gap: 10px; margin-bottom: 7px; }
+.goal-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 15px; }
+.goal-icon-health   { background: var(--blue-light); color: var(--primary); }
+.goal-icon-work     { background: #EDE9FE; color: #5B21B6; }
+.goal-icon-personal { background: var(--amber-bg); color: #633806; }
+.goal-name { font-size: 13px; font-weight: 500; color: var(--text); }
+.goal-meta { font-size: 11px; color: var(--text-2); }
+
+.progress-bg   { height: 5px; border-radius: 999px; background: var(--bg-2); }
+.progress-fill { height: 5px; border-radius: 999px; background: var(--mid-blue); transition: width 0.4s ease; }
+
+/* Rewards tab */
+.points-hero { text-align: center; padding: 14px 0 10px; }
+.points-hero-val   { font-size: 38px; font-weight: 700; color: var(--primary); }
+.points-hero-label { font-size: 12px; color: var(--text-2); margin-top: 2px; }
+
+.reward-item { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 0.5px solid var(--border); }
+.reward-item:last-child { border-bottom: none; }
+.reward-icon { width: 34px; height: 34px; border-radius: 8px; background: var(--amber-bg); display: flex; align-items: center; justify-content: center; font-size: 15px; color: #633806; flex-shrink: 0; }
+.reward-info { flex: 1; }
+.reward-name { font-size: 12px; font-weight: 500; color: var(--text); }
+.reward-pts  { font-size: 11px; color: var(--text-2); }
+.redeem-btn  { font-size: 11px; padding: 4px 10px; border-radius: var(--r-md); border: 1px solid var(--primary); background: none; color: var(--primary); cursor: pointer; font-weight: 500; flex-shrink: 0; }
+
+/* Apps tab */
+.int-row { display: flex; align-items: center; gap: 12px; padding: 11px 0; border-bottom: 0.5px solid var(--border); }
+.int-row:last-child { border-bottom: none; }
+.int-icon-sm { width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+.int-jira { background: var(--blue-light); color: var(--primary); }
+.int-gcal { background: var(--amber-bg); color: #633806; }
+.int-health { background: #F3F4F6; color: #374151; }
+.int-name { font-size: 13px; font-weight: 500; color: var(--text); }
+.int-desc { font-size: 11px; color: var(--text-2); }
+.connect-btn { font-size: 11px; padding: 4px 10px; border-radius: var(--r-md); border: 0.5px solid var(--border); background: var(--bg-2); color: var(--text); cursor: pointer; font-weight: 500; transition: all 0.15s; flex-shrink: 0; font-family: inherit; }
+.int-connect-cell { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; flex-shrink: 0; }
+.int-connect-cell > .connect-btn { display: block; }
+.int-connect-cell > .int-connected { display: none; flex-direction: column; align-items: flex-end; gap: 3px; }
+.int-connect-cell.connected > .connect-btn { display: none; }
+.int-connect-cell.connected > .int-connected { display: flex; }
+.disconnect-link { font-size: 11px; color: var(--text-2); background: none; border: none; cursor: pointer; padding: 0; font-family: inherit; text-decoration: underline; line-height: 1; }
+.disconnect-link:hover { color: #991B1B; }
+
+/* ── Goal detail overlay ── */
+.goal-detail {
+  display: none;
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  background: var(--bg);
+  z-index: 20;
+  padding: 4px 0 0;
+  overflow-y: auto;
+}
+.goal-detail.open { display: block; }
+
+.detail-back {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 13px; font-weight: 500; color: var(--primary);
+  cursor: pointer; margin-bottom: 12px; padding: 4px 0;
+}
+
+/* ── Annotation panel ── */
+.annotation-panel {
+  max-width: 300px;
+  padding-top: 4px;
+}
+
+.anno-card {
+  background: #fff;
+  border: 0.5px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 18px 20px;
+  margin-bottom: 12px;
+}
+
+.anno-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+.anno-body  { font-size: 12px; color: var(--text-2); line-height: 1.6; margin-bottom: 12px; }
+
+.anno-hint { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-2); margin-bottom: 5px; }
+.anno-hint i { color: var(--primary); font-size: 14px; flex-shrink: 0; }
+
+/* ── Admin console ── */
+.admin-shell {
+  background: #fff;
+  border: 0.5px solid var(--border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  max-width: 1060px;
+  margin: 0 auto;
+}
+
+.admin-topbar {
+  background: var(--primary);
+  height: 52px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 20px;
+}
+
+.admin-logo {
+  font-size: 15px; font-weight: 500; color: #fff;
+  display: flex; align-items: center; gap: 8px;
+}
+.admin-logo-mark { width: 22px; height: 22px; border-radius: 5px; background: var(--amber); display: flex; align-items: center; justify-content: center; color: var(--amber-dark); font-size: 13px; }
+.admin-logo-sub  { font-size: 12px; color: rgba(255,255,255,0.5); font-weight: 400; margin-left: 4px; }
+
+.admin-body { display: flex; min-height: 540px; }
+
+.admin-sidebar {
+  width: 192px; flex-shrink: 0;
+  border-right: 0.5px solid var(--border);
+  padding: 16px 0;
+  background: var(--navy);
+}
+
+.sidebar-section { font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.35); padding: 0 16px 6px; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 12px; }
+.sidebar-section:first-child { margin-top: 0; }
+
+.sidebar-item { display: flex; align-items: center; gap: 8px; padding: 8px 16px; font-size: 13px; color: rgba(255,255,255,0.6); cursor: pointer; transition: all 0.15s; }
+.sidebar-item:hover { color: rgba(255,255,255,0.9); }
+.sidebar-item.active { color: var(--amber); background: rgba(239,159,39,0.12); font-weight: 500; }
+
+.admin-content { flex: 1; padding: 22px 24px; background: var(--bg); overflow: auto; }
+
+.admin-page { display: none; }
+.admin-page.active { display: block; }
+
+.page-title { font-size: 17px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+.page-desc  { font-size: 13px; color: var(--text-2); margin-bottom: 20px; }
+
+.card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--r-lg); padding: 16px 20px; margin-bottom: 14px; }
+.card-title { font-size: 11px; font-weight: 600; color: var(--text-2); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 14px; }
+
+.field-row { display: flex; align-items: flex-start; justify-content: space-between; padding: 13px 0; border-bottom: 0.5px solid var(--border); gap: 24px; }
+.field-row:last-child { border-bottom: none; }
+.field-label { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+.field-desc  { font-size: 12px; color: var(--text-2); line-height: 1.5; max-width: 400px; }
+.field-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+
+.select-input { font-size: 13px; padding: 6px 10px; border: 0.5px solid var(--border); border-radius: var(--r-md); background: var(--bg-2); color: var(--text); min-width: 160px; cursor: pointer; }
+.text-input   { font-size: 13px; padding: 6px 10px; border: 0.5px solid var(--border); border-radius: var(--r-md); background: var(--bg-2); color: var(--text); min-width: 210px; }
+.text-input:focus, .select-input:focus { outline: 2px solid var(--blue-border); border-color: var(--blue-border); }
+
+/* Toggle */
+.toggle { width: 36px; height: 20px; border-radius: 999px; position: relative; cursor: pointer; flex-shrink: 0; transition: background 0.2s; }
+.toggle-on  { background: var(--mid-blue); }
+.toggle-off { background: #B4B2A9; }
+.toggle::after { content: ''; width: 14px; height: 14px; border-radius: 50%; background: white; position: absolute; top: 3px; transition: left 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+.toggle-on::after  { left: 19px; }
+.toggle-off::after { left: 3px; }
+
+/* Stats grid */
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px; }
+.stat-card  { background: var(--bg-2); border-radius: var(--r-md); padding: 14px 16px; }
+.stat-label { font-size: 11px; color: var(--text-2); margin-bottom: 4px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; }
+.stat-val   { font-size: 24px; font-weight: 700; color: var(--text); }
+.stat-sub   { font-size: 11px; color: var(--text-2); margin-top: 2px; }
+.stat-up    { color: #2D7A4F; }
+
+/* Table */
+.data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.data-table th { text-align: left; font-size: 11px; font-weight: 600; color: var(--text-2); text-transform: uppercase; letter-spacing: 0.06em; padding: 8px 12px; border-bottom: 1px solid var(--border); }
+.data-table td { padding: 10px 12px; border-bottom: 0.5px solid var(--border); color: var(--text); }
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tbody tr:hover td { background: var(--bg-2); }
+
+/* Info banner */
+.info-banner { border-radius: var(--r-md); background: var(--blue-light); border: 0.5px solid var(--blue-border); padding: 12px 16px; font-size: 12px; color: var(--primary); line-height: 1.6; display: flex; align-items: flex-start; gap: 8px; }
+.info-banner i { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+
+/* Color swatches */
+.color-swatch { display: flex; align-items: center; gap: 8px; }
+.swatch { width: 28px; height: 28px; border-radius: 6px; border: 1px solid var(--border); }
+.swatch-code { font-size: 12px; color: var(--text-2); font-family: monospace; }
+
+/* ── Rewards page ── */
+.pts-input { width: 72px; font-size: 13px; padding: 6px 8px; border: 0.5px solid var(--border); border-radius: var(--r-md); background: var(--bg-2); color: var(--text); text-align: right; font-family: inherit; }
+.pts-input:focus { outline: 2px solid var(--blue-border); border-color: var(--blue-border); }
+.pts-unit { font-size: 12px; color: var(--text-2); min-width: 24px; }
+
+/* ── Icon picker ── */
+.icon-preview { width: 30px; height: 30px; border-radius: 7px; background: var(--amber-bg); color: #633806; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; border: 0.5px solid var(--border); }
+.icon-name-input { font-family: monospace; font-size: 12px; }
+
+/* ── Points by category ── */
+.pts-cat-header { display: flex; align-items: center; gap: 8px; padding: 0 0 6px; border-bottom: 0.5px solid var(--border); margin-bottom: 4px; }
+.pts-cat-row { gap: 8px; }
+.pts-cat-cell { display: flex; align-items: center; gap: 4px; width: 100px; justify-content: flex-end; flex-shrink: 0; }
+.cat-icon { width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+.cat-icon-work     { background: #EDE9FE; color: #5B21B6; }
+.cat-icon-personal { background: var(--amber-bg); color: #633806; }
+.cat-icon-health   { background: var(--blue-light); color: var(--primary); }
+
+/* ── Reward catalog ── */
+.catalog-header { display: flex; align-items: center; gap: 8px; padding: 0 0 6px; border-bottom: 0.5px solid var(--border); margin-bottom: 4px; }
+.catalog-col-label { font-size: 10px; font-weight: 600; color: var(--text-2); text-transform: uppercase; letter-spacing: 0.07em; }
+.catalog-row { display: flex; align-items: center; gap: 8px; padding: 7px 0; border-bottom: 0.5px solid var(--border); }
+.catalog-row:last-child { border-bottom: none; }
+.catalog-empty { font-size: 13px; color: var(--text-2); padding: 14px 0 6px; text-align: center; }
+.catalog-name { flex: 1; min-width: 0; }
+.catalog-icon { width: 130px; font-family: monospace; font-size: 12px; }
+.remove-btn { width: 28px; height: 28px; border-radius: var(--r-md); border: 0.5px solid var(--border); background: var(--bg-2); color: var(--text-2); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; transition: all 0.15s; }
+.remove-btn:hover { background: #FEE2E2; border-color: #FCA5A5; color: #991B1B; }
+.add-reward-btn { margin-top: 12px; display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; color: var(--primary); background: var(--blue-light); border: 0.5px solid var(--blue-border); border-radius: var(--r-md); padding: 7px 14px; cursor: pointer; font-family: inherit; transition: opacity 0.15s; }
+.add-reward-btn:hover { opacity: 0.8; }
+
+/* ── Landing page ── */
+.var-chips { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 16px; padding: 10px 12px; background: var(--bg-2); border-radius: var(--r-md); }
+.var-chip  { font-size: 11px; font-weight: 600; font-family: monospace; background: var(--blue-light); color: var(--primary); border: 0.5px solid var(--blue-border); border-radius: 4px; padding: 2px 6px; }
+.var-chip-desc { font-size: 11px; color: var(--text-2); margin-right: 8px; }
+
+.header-row { display: flex; align-items: flex-start; justify-content: space-between; padding: 14px 0; border-bottom: 0.5px solid var(--border); gap: 20px; }
+.header-row-left { display: flex; align-items: flex-start; gap: 12px; flex: 1; min-width: 0; }
+.header-row input.text-input { flex-shrink: 0; }
+.header-row .toggle { margin-top: 2px; flex-shrink: 0; }
+.header-row-disabled input { opacity: 0.4; pointer-events: none; }
+.header-row-disabled .field-label, .header-row-disabled .field-desc { opacity: 0.4; }
+
+.radio-option-group { display: flex; flex-direction: column; }
+.radio-option { display: flex; align-items: flex-start; gap: 12px; padding: 13px 0; border-bottom: 0.5px solid var(--border); cursor: pointer; }
+.radio-dot { width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--border); flex-shrink: 0; margin-top: 2px; transition: all 0.15s; background: #fff; }
+.radio-dot.active { border-color: var(--primary); background: var(--primary); box-shadow: inset 0 0 0 3px #fff; }
+
+/* ── Forms (shared by bottom sheet) ── */
+.phone-form-group { margin-bottom: 10px; }
+.phone-form-label { font-size: 10px; font-weight: 600; color: var(--text-2); margin-bottom: 4px; display: block; text-transform: uppercase; letter-spacing: 0.06em; }
+.phone-input { width: 100%; font-size: 13px; padding: 8px 10px; border: 1px solid var(--border); border-radius: var(--r-md); background: var(--bg-2); color: var(--text); font-family: inherit; }
+.phone-input:focus { outline: none; border-color: var(--blue-border); background: #fff; }
+.phone-select { width: 100%; font-size: 13px; padding: 8px 10px; border: 1px solid var(--border); border-radius: var(--r-md); background: var(--bg-2); color: var(--text); cursor: pointer; font-family: inherit; }
+.phone-select:focus { outline: none; border-color: var(--blue-border); }
+
+/* ── FAB ── */
+.phone-fab {
+  position: absolute; bottom: 14px; right: 14px;
+  width: 38px; height: 38px; border-radius: 50%;
+  background: var(--amber);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; z-index: 10;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+  transition: transform 0.15s;
+}
+.phone-fab:hover { transform: scale(1.08); }
+
+/* ── Bottom sheet ── */
+.sheet-backdrop {
+  display: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.28); z-index: 25;
+}
+.sheet-backdrop.open { display: block; }
+
+.bottom-sheet {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: var(--bg);
+  border-radius: 16px 16px 0 0;
+  padding: 0 16px 16px;
+  z-index: 30;
+  transform: translateY(100%);
+  transition: transform 0.25s cubic-bezier(.32,.72,0,1);
+  box-shadow: 0 -6px 24px rgba(0,0,0,0.14);
+  max-height: 92%;
+  overflow-y: auto;
+}
+.bottom-sheet.open { transform: translateY(0); }
+
+.sheet-handle {
+  width: 36px; height: 4px; background: var(--border); border-radius: 2px;
+  margin: 10px auto 14px;
+}
+.phone-btn-primary { width: 100%; padding: 10px; border-radius: var(--r-md); background: var(--primary); color: white; border: none; font-size: 13px; font-weight: 500; cursor: pointer; font-family: inherit; margin-top: 4px; }
+.create-success { display:none; text-align:center; padding: 20px 0 10px; }
+.create-success i { font-size: 36px; color: #2D7A4F; display: block; margin-bottom: 8px; }
+.create-success p { font-size: 13px; color: var(--text); font-weight: 500; }
+.create-success small { font-size: 11px; color: var(--text-2); }
+
+/* ── Save bar ── */
+.save-bar {
+  display: none;
+  position: sticky;
+  bottom: 0;
+  margin: 20px -24px -22px;
+  background: var(--navy);
+  border-top: 1px solid rgba(255,255,255,0.1);
+  padding: 12px 24px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  z-index: 50;
+}
+.save-bar.visible { display: flex; }
+.save-bar-msg { font-size: 13px; color: rgba(255,255,255,0.65); display: flex; align-items: center; gap: 7px; }
+.save-bar-msg i { font-size: 14px; color: var(--amber); }
+.save-btn {
+  font-size: 13px; font-weight: 500;
+  padding: 7px 18px;
+  border-radius: var(--r-md);
+  border: none;
+  background: var(--amber);
+  color: var(--amber-dark);
+  cursor: pointer;
+  font-family: inherit;
+  display: flex; align-items: center; gap: 6px;
+  transition: opacity 0.15s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.save-btn:disabled { opacity: 0.6; cursor: default; }
+.save-btn-spinner { display: none; font-size: 14px; }
+.save-btn.saving .save-btn-spinner { display: inline-block; animation: ti-spin 0.7s linear infinite; }
+.save-btn.saving .save-btn-label { display: none; }
+
+/* ── Reminder segmented control (bottom sheet) ── */
+.rem-seg { display:flex; background:var(--bg-2); border-radius:6px; padding:2px; }
+.rem-tab { flex:1; padding:5px 4px; border-radius:4px; font-size:11px; font-weight:500; background:none; border:none; color:var(--text-2); cursor:pointer; font-family:inherit; text-align:center; }
+.rem-tab.active { background:#fff; border:0.5px solid var(--border); color:var(--text); box-shadow:0 1px 2px rgba(0,0,0,0.08); }
+
+/* ── Toast ── */
+.toast {
+  position: fixed;
+  top: 70px; right: 24px;
+  background: var(--navy);
+  color: #fff;
+  padding: 11px 16px;
+  border-radius: var(--r-lg);
+  font-size: 13px;
+  font-weight: 500;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 0.2s, transform 0.2s;
+  z-index: 9999;
+  pointer-events: none;
+  display: flex; align-items: center; gap: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  border-left: 3px solid var(--amber);
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- ── App header ── -->
+<header class="app-header">
+  <div class="app-logo">
+    <div class="app-logo-mark"><i class="ti ti-check"></i></div>
+    Task It
+  </div>
+  <div class="mode-tabs">
+    <button class="mode-tab active" data-mode="user" onclick="switchMode('user')">
+      <i class="ti ti-device-mobile" style="font-size:13px;"></i> User app
+    </button>
+    <button class="mode-tab" data-mode="signin" onclick="switchMode('signin')">
+      <i class="ti ti-login" style="font-size:13px;"></i> Sign in
+    </button>
+    <button class="mode-tab" data-mode="admin" onclick="switchMode('admin')">
+      <i class="ti ti-layout-dashboard" style="font-size:13px;"></i> Admin console
+    </button>
+  </div>
+  <div style="width:110px;"></div>
+</header>
+
+<main class="app-body">
+
+  <!-- ══════════════════════════════════
+       USER APP VIEW
+  ══════════════════════════════════ -->
+  <div class="mode-view active" id="view-user">
+    <div class="mobile-stage">
+
+      <!-- ── Phone ── -->
+      <div class="phone-frame">
+        <!-- Status bar -->
+        <div class="phone-status">
+          <span>9:41</span>
+          <span><i class="ti ti-wifi" style="font-size:11px;"></i></span>
+        </div>
+        <!-- Top bar -->
+        <div class="phone-topbar">
+          <div class="phone-logo">
+            <div class="phone-logo-mark"><i class="ti ti-check" style="font-size:10px;"></i></div>
+            Task It
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span id="pts-display" style="font-size:11px;color:rgba(255,255,255,0.8);font-weight:500;">340 pts</span>
+            <div class="avatar">EK</div>
+          </div>
+        </div>
+        <div class="accent-bar"></div>
+
+        <!-- ── Phone body ── -->
+        <div class="phone-body">
+
+          <!-- TODAY TAB -->
+          <div class="phone-tab active" id="tab-today">
+            <p class="phone-greeting">Good morning, Emily</p>
+            <p class="phone-subtext" id="today-sub">4 of 7 goals done · 14-day streak</p>
+            <div class="phone-stats">
+              <div class="phone-stat">
+                <p class="phone-stat-label">Streak</p>
+                <p class="phone-stat-val blue">14</p>
+              </div>
+              <div class="phone-stat">
+                <p class="phone-stat-label">Points</p>
+                <p class="phone-stat-val" id="pts-stat">340</p>
+              </div>
+            </div>
+            <p class="phone-section">Today</p>
+            <div class="phone-card">
+              <div class="phone-task" data-task-id="t0" onclick="openTaskDetail('t0')">
+                <div class="phone-check done" onclick="event.stopPropagation();toggleTask(this.closest('.phone-task'),20)"><i class="ti ti-check" style="font-size:8px;color:white;"></i></div>
+                <span class="task-label done">Morning walk</span>
+                <span class="phone-pts">+20</span>
+              </div>
+              <div class="phone-task" data-task-id="t1" onclick="openTaskDetail('t1')">
+                <div class="phone-check done" onclick="event.stopPropagation();toggleTask(this.closest('.phone-task'),10)"><i class="ti ti-check" style="font-size:8px;color:white;"></i></div>
+                <span class="task-label done">Medication</span>
+                <span class="phone-pts">+10</span>
+              </div>
+              <div class="phone-task" data-task-id="t2" onclick="openTaskDetail('t2')">
+                <div class="phone-check" onclick="event.stopPropagation();toggleTask(this.closest('.phone-task'),0)"></div>
+                <span class="task-label">Standup — 10:00 AM</span>
+                <span class="badge badge-navy">Work</span>
+              </div>
+              <div class="phone-task" data-task-id="t3" onclick="openTaskDetail('t3')">
+                <div class="phone-check" onclick="event.stopPropagation();toggleTask(this.closest('.phone-task'),5)"></div>
+                <span class="task-label">Floss</span>
+                <span class="phone-pts">+5</span>
+              </div>
+              <div class="phone-task" data-task-id="t4" onclick="openTaskDetail('t4')">
+                <div class="phone-check" onclick="event.stopPropagation();toggleTask(this.closest('.phone-task'),15)"></div>
+                <span class="task-label">30-min walk</span>
+                <span class="phone-pts">+15</span>
+                <i class="ti ti-target" style="font-size:12px;color:var(--primary);flex-shrink:0;"></i>
+              </div>
+              <div class="phone-task" data-task-id="t5" onclick="openTaskDetail('t5')">
+                <div class="phone-check" onclick="event.stopPropagation();toggleTask(this.closest('.phone-task'),25)"></div>
+                <span class="task-label">Read 20 pages</span>
+                <span class="phone-pts">+25</span>
+                <i class="ti ti-target" style="font-size:12px;color:var(--primary);flex-shrink:0;"></i>
+              </div>
+              <div class="phone-task" data-task-id="t6" onclick="openTaskDetail('t6')">
+                <div class="phone-check" onclick="event.stopPropagation();toggleTask(this.closest('.phone-task'),0)"></div>
+                <span class="task-label">Team 1:1 — 2:30 PM</span>
+                <span class="badge badge-navy">Work</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- REWARDS TAB -->
+          <div class="phone-tab" id="tab-rewards">
+            <div class="points-hero">
+              <p class="points-hero-val" id="rewards-pts">340</p>
+              <p class="points-hero-label">points available</p>
+            </div>
+            <p class="phone-section" id="rewards-section-heading">Redeem rewards</p>
+            <div class="phone-card" id="rewards-list"></div>
+          </div>
+
+          <!-- APPS TAB -->
+          <div class="phone-tab" id="tab-apps">
+            <p class="phone-greeting" style="margin-bottom:4px;" id="apps-heading">Connected apps</p>
+            <p style="font-size:11px;color:var(--text-2);margin-bottom:14px;" id="apps-desc">Sync your calendars and tools.</p>
+            <div class="phone-card">
+              <div class="int-row">
+                <div class="int-icon-sm int-jira" id="user-icon-jira"><i class="ti ti-brand-trello"></i></div>
+                <div style="flex:1;"><p class="int-name">Jira</p><p class="int-desc">Sync work issues</p></div>
+                <div class="int-connect-cell connected" id="connect-jira">
+                  <button class="connect-btn" onclick="connectApp('jira')">Connect</button>
+                  <div class="int-connected">
+                    <span class="badge badge-blue" style="font-size:11px;">Connected</span>
+                    <button class="disconnect-link" onclick="disconnectApp('jira')">Disconnect</button>
+                  </div>
+                </div>
+              </div>
+              <div class="int-row">
+                <div class="int-icon-sm int-gcal" id="user-icon-gcal"><i class="ti ti-calendar"></i></div>
+                <div style="flex:1;"><p class="int-name">Google Calendar</p><p class="int-desc">Pull in events</p></div>
+                <div class="int-connect-cell" id="connect-gcal">
+                  <button class="connect-btn" onclick="connectApp('gcal')">Connect</button>
+                  <div class="int-connected">
+                    <span class="badge badge-blue" style="font-size:11px;">Connected</span>
+                    <button class="disconnect-link" onclick="disconnectApp('gcal')">Disconnect</button>
+                  </div>
+                </div>
+              </div>
+              <div class="int-row">
+                <div class="int-icon-sm int-health" id="user-icon-apple"><i class="ti ti-heartbeat"></i></div>
+                <div style="flex:1;"><p class="int-name">Apple Health</p><p class="int-desc">Sync health data</p></div>
+                <div class="int-connect-cell" id="connect-apple">
+                  <button class="connect-btn" onclick="connectApp('apple')">Connect</button>
+                  <div class="int-connected">
+                    <span class="badge badge-blue" style="font-size:11px;">Connected</span>
+                    <button class="disconnect-link" onclick="disconnectApp('apple')">Disconnect</button>
+                  </div>
+                </div>
+              </div>
+              <div class="int-row">
+                <div class="int-icon-sm" style="background:#E8F5E9;color:#2E7D32;" id="user-icon-ghealth"><i class="ti ti-heart-rate-monitor"></i></div>
+                <div style="flex:1;"><p class="int-name">Google Health</p><p class="int-desc">Sync fitness data</p></div>
+                <div class="int-connect-cell" id="connect-ghealth">
+                  <button class="connect-btn" onclick="connectApp('ghealth')">Connect</button>
+                  <div class="int-connected">
+                    <span class="badge badge-blue" style="font-size:11px;">Connected</span>
+                    <button class="disconnect-link" onclick="disconnectApp('ghealth')">Disconnect</button>
+                  </div>
+                </div>
+              </div>
+              <div class="int-row">
+                <div class="int-icon-sm" style="background:#FFF3E0;color:#E65100;" id="user-icon-garmin"><i class="ti ti-run"></i></div>
+                <div style="flex:1;"><p class="int-name">Garmin</p><p class="int-desc">Sync activity &amp; steps</p></div>
+                <div class="int-connect-cell" id="connect-garmin">
+                  <button class="connect-btn" onclick="connectApp('garmin')">Connect</button>
+                  <div class="int-connected">
+                    <span class="badge badge-blue" style="font-size:11px;">Connected</span>
+                    <button class="disconnect-link" onclick="disconnectApp('garmin')">Disconnect</button>
+                  </div>
+                </div>
+              </div>
+              <div class="int-row">
+                <div class="int-icon-sm" style="background:#FCE4EC;color:#C62828;" id="user-icon-fitbit"><i class="ti ti-activity"></i></div>
+                <div style="flex:1;"><p class="int-name">Fitbit</p><p class="int-desc">Sync activity &amp; sleep</p></div>
+                <div class="int-connect-cell" id="connect-fitbit">
+                  <button class="connect-btn" onclick="connectApp('fitbit')">Connect</button>
+                  <div class="int-connected">
+                    <span class="badge badge-blue" style="font-size:11px;">Connected</span>
+                    <button class="disconnect-link" onclick="disconnectApp('fitbit')">Disconnect</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- FAB -->
+          <div class="phone-fab" id="phone-fab" onclick="openAddSheet()">
+            <i class="ti ti-plus" style="font-size:18px;color:var(--amber-dark);"></i>
+          </div>
+
+          <!-- Sheet backdrop -->
+          <div class="sheet-backdrop" id="sheet-backdrop" onclick="closeAddSheet()"></div>
+
+          <!-- Bottom sheet: Add task -->
+          <div class="bottom-sheet" id="add-sheet">
+            <div class="sheet-handle"></div>
+            <p id="sheet-heading" style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:12px;">Add a task</p>
+            <div id="create-task-form">
+              <div class="phone-form-group">
+                <label id="sheet-label-task" class="phone-form-label">Task name</label>
+                <input class="phone-input" id="new-task-name" type="text" placeholder="e.g. Drink 8 glasses of water" />
+              </div>
+              <div class="phone-form-group">
+                <label id="sheet-label-cat" class="phone-form-label">Category</label>
+                <select class="phone-select" id="new-task-cat">
+                  <option value="work">Work</option>
+                  <option value="personal">Personal</option>
+                  <option value="health">Health</option>
+                </select>
+              </div>
+              <div class="phone-form-group">
+                <label id="sheet-label-recur" class="phone-form-label">Recurrence</label>
+                <select class="phone-select" id="new-task-recur">
+                  <option value="daily">Daily</option>
+                  <option value="weekly">Weekly</option>
+                  <option value="none">One-time</option>
+                </select>
+              </div>
+              <div class="phone-form-group">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+                  <label id="sheet-label-goal" class="phone-form-label" style="margin-bottom:0;">Link to a goal</label>
+                  <div class="toggle toggle-off" id="toggle-goal-link" onclick="toggleGoalLink()"></div>
+                </div>
+                <div id="goal-link-fields" style="display:none;">
+                  <input class="phone-input" id="new-goal-name" type="text" placeholder="Goal name, e.g. Run a 5K" style="margin-bottom:6px;" />
+                  <input class="phone-input" id="new-goal-date" type="date" />
+                </div>
+              </div>
+              <div class="phone-form-group">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+                  <label class="phone-form-label" style="margin-bottom:0;">Remind me</label>
+                  <div class="toggle toggle-off" id="toggle-reminder" onclick="toggleReminder()"></div>
+                </div>
+                <div id="reminder-fields" style="display:none;">
+                  <div class="rem-seg" style="margin-bottom:8px;">
+                    <button id="rem-tab-time" class="rem-tab active" onclick="remModeSwitch('time')">At a time</button>
+                    <button id="rem-tab-before" class="rem-tab" onclick="remModeSwitch('before')">Before due date</button>
+                  </div>
+                  <div id="rem-mode-time">
+                    <input class="phone-input" type="time" id="rem-time" value="17:00" />
+                  </div>
+                  <div id="rem-mode-before" style="display:none;">
+                    <select class="phone-select" id="rem-offset">
+                      <option value="30">30 minutes before</option>
+                      <option value="60" selected>1 hour before</option>
+                      <option value="120">2 hours before</option>
+                      <option value="1440">1 day before</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <button id="sheet-cta" class="phone-btn-primary" onclick="createTask()">Add task</button>
+            </div>
+            <div class="create-success" id="create-success" style="display:none;">
+              <i class="ti ti-circle-check"></i>
+              <p id="create-success-msg">Task added!</p>
+              <small>Find it in your Today list.</small>
+            </div>
+          </div>
+
+          <!-- TASK DETAIL OVERLAY -->
+          <div class="goal-detail" id="task-detail">
+            <div class="detail-back" onclick="closeTaskDetail()">
+              <i class="ti ti-arrow-left"></i> Back to today
+            </div>
+            <div class="phone-card" style="margin-bottom:10px;">
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+                <div id="td-icon" class="goal-icon goal-icon-health" style="width:38px;height:38px;">
+                  <i class="ti ti-activity-heartbeat" style="font-size:18px;"></i>
+                </div>
+                <div style="flex:1;">
+                  <p id="td-title" style="font-size:14px;font-weight:600;color:var(--text);">Task name</p>
+                  <p id="td-meta" style="font-size:11px;color:var(--text-2);">Health · Daily</p>
+                </div>
+                <span id="td-pts" class="badge badge-amber" style="display:none;">+20 pts</span>
+              </div>
+              <div id="td-goal-section" style="display:none;border-top:0.5px solid var(--border);padding-top:10px;margin-top:2px;">
+                <p style="font-size:10px;font-weight:600;color:var(--text-2);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:8px;">Linked goal</p>
+                <div style="display:flex;align-items:flex-start;gap:10px;">
+                  <div style="width:32px;height:32px;border-radius:8px;background:var(--blue-light);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                    <i class="ti ti-target" style="font-size:15px;color:var(--primary);"></i>
+                  </div>
+                  <div>
+                    <p id="td-goal-name" style="font-size:13px;font-weight:500;color:var(--text);">Goal name</p>
+                    <p id="td-goal-date" style="font-size:11px;color:var(--text-2);">Ends —</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button id="td-complete-btn" onclick="toggleTaskFromDetail()" style="width:100%;padding:11px;border-radius:var(--r-md);background:var(--primary);color:white;border:none;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;">
+              Mark complete today
+            </button>
+          </div>
+
+        </div><!-- /phone-body -->
+
+        <!-- Bottom nav -->
+        <div class="phone-nav">
+          <div class="phone-nav-item active" onclick="switchTab('today',this)" style="padding:4px 8px;"><i class="ti ti-home"></i><span>Today</span></div>
+          <div class="phone-nav-item" onclick="switchTab('rewards',this)" style="padding:4px 8px;"><i class="ti ti-gift"></i><span>Rewards</span></div>
+          <div class="phone-nav-item" onclick="switchTab('apps',this)" style="padding:4px 8px;"><i class="ti ti-plug"></i><span>Apps</span></div>
+        </div>
+      </div><!-- /phone-frame -->
+
+      <!-- Annotation panel -->
+      <div class="annotation-panel">
+        <div class="anno-card">
+          <p class="anno-title">Employee-facing app</p>
+          <p class="anno-body">Task It lets employees track daily goals, earn points, and redeem employer rewards — all from their phone.</p>
+          <div class="anno-hint"><i class="ti ti-check"></i>Tap a task to see details &amp; linked goal</div>
+          <div class="anno-hint"><i class="ti ti-check"></i>Tap + to add a task with optional goal</div>
+          <div class="anno-hint"><i class="ti ti-check"></i>Redeem points for rewards</div>
+          <div class="anno-hint"><i class="ti ti-check"></i>Connect Jira &amp; Google Calendar</div>
+        </div>
+        <div class="anno-card" style="background:var(--blue-light);border-color:var(--blue-border);">
+          <p style="font-size:12px;font-weight:600;color:var(--primary);margin-bottom:6px;">
+            <i class="ti ti-api" style="font-size:14px;vertical-align:-2px;margin-right:5px;"></i>Powered by the Task It API
+          </p>
+          <p style="font-size:12px;color:var(--primary);line-height:1.6;">
+            Goal completions, point balances, and integration status are all read and written through the <code style="font-family:monospace;background:rgba(255,255,255,0.6);padding:1px 4px;border-radius:3px;">trackit.io/v1</code> REST API.
+          </p>
+        </div>
+      </div>
+
+    </div><!-- /mobile-stage -->
+  </div><!-- /view-user -->
+
+
+  <!-- ══════════════════════════════════
+       SIGN IN VIEW
+  ══════════════════════════════════ -->
+  <div class="mode-view" id="view-signin">
+    <div class="mobile-stage">
+
+      <!-- Phone: Task It accounts -->
+      <div>
+        <div class="phone-frame">
+          <div class="phone-status">
+            <span>9:41</span>
+            <span><i class="ti ti-wifi" style="font-size:11px;"></i></span>
+          </div>
+          <div class="accent-bar"></div>
+          <div class="phone-body" style="height:460px;display:flex;flex-direction:column;justify-content:center;">
+            <div style="text-align:center;margin-bottom:22px;">
+              <div style="display:inline-flex;align-items:center;gap:9px;">
+                <div class="phone-logo-mark" style="width:30px;height:30px;border-radius:8px;font-size:14px;"><i class="ti ti-check"></i></div>
+                <span style="font-size:18px;font-weight:600;color:var(--primary);">Task It</span>
+              </div>
+            </div>
+            <p style="font-size:15px;font-weight:600;text-align:center;color:var(--text);margin-bottom:18px;">Sign in</p>
+            <div class="phone-form-group">
+              <label class="phone-form-label">Email</label>
+              <input class="phone-input" type="email" placeholder="you@example.com">
+            </div>
+            <div class="phone-form-group">
+              <label class="phone-form-label">Password</label>
+              <input class="phone-input" type="password" placeholder="Password">
+            </div>
+            <div style="text-align:right;margin-bottom:14px;margin-top:-4px;">
+              <a href="#" style="font-size:11px;color:var(--primary);text-decoration:none;">Forgot password?</a>
+            </div>
+            <button class="phone-btn-primary">Sign in</button>
+            <p style="text-align:center;font-size:11px;color:var(--text-2);margin-top:14px;line-height:1.6;">
+              Don't have an account?<br><a href="#" style="color:var(--primary);text-decoration:none;">Sign up</a>
+            </p>
+          </div>
+        </div>
+        <p style="font-size:11px;color:var(--text-2);text-align:center;margin-top:10px;font-weight:500;letter-spacing:0.04em;text-transform:uppercase;">Task It accounts</p>
+      </div>
+
+      <!-- Phone: Enterprise SSO -->
+      <div>
+        <div class="phone-frame">
+          <div class="phone-status">
+            <span>9:41</span>
+            <span><i class="ti ti-wifi" style="font-size:11px;"></i></span>
+          </div>
+          <div class="accent-bar"></div>
+          <div class="phone-body" style="height:460px;display:flex;flex-direction:column;justify-content:center;">
+            <div style="text-align:center;margin-bottom:22px;">
+              <div style="display:inline-flex;align-items:center;gap:9px;">
+                <div class="phone-logo-mark" style="width:30px;height:30px;border-radius:8px;font-size:14px;"><i class="ti ti-check"></i></div>
+                <span style="font-size:18px;font-weight:600;color:var(--primary);">Task It</span>
+              </div>
+            </div>
+            <p style="font-size:15px;font-weight:600;text-align:center;color:var(--text);margin-bottom:4px;">Enterprise sign-in</p>
+            <p style="font-size:12px;color:var(--text-2);text-align:center;margin-bottom:20px;line-height:1.5;">Sign in using your organization's<br>SSO provider</p>
+            <div class="phone-form-group">
+              <label class="phone-form-label">Work email</label>
+              <input class="phone-input" type="email" placeholder="you@yourcompany.com">
+            </div>
+            <button class="phone-btn-primary" style="margin-bottom:14px;">Continue with SSO</button>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+              <div style="flex:1;height:1px;background:var(--border);"></div>
+              <span style="font-size:11px;color:var(--text-2);">or</span>
+              <div style="flex:1;height:1px;background:var(--border);"></div>
+            </div>
+            <p style="text-align:center;font-size:11px;color:var(--text-2);">
+              Use a <a href="#" style="color:var(--primary);text-decoration:none;">Task It account</a> instead
+            </p>
+          </div>
+        </div>
+        <p style="font-size:11px;color:var(--text-2);text-align:center;margin-top:10px;font-weight:500;letter-spacing:0.04em;text-transform:uppercase;">Enterprise SSO</p>
+      </div>
+
+      <!-- Annotation panel -->
+      <div class="annotation-panel">
+        <div class="anno-card">
+          <p class="anno-title">Sign in flows</p>
+          <p class="anno-body">Task It supports two authentication methods. Admins choose the sign-in method from <strong>Auth &amp; SSO</strong> in the admin console — all employees in the organization use the same method.</p>
+          <div class="anno-hint"><i class="ti ti-check"></i>Task It accounts — email &amp; password managed by Task It</div>
+          <div class="anno-hint"><i class="ti ti-check"></i>Enterprise SSO — Okta, Azure AD, Google Workspace, and others</div>
+          <div class="anno-hint"><i class="ti ti-check"></i>Switching auth method signs out all active sessions</div>
+        </div>
+        <div class="anno-card" style="background:var(--blue-light);border-color:var(--blue-border);">
+          <p style="font-size:12px;font-weight:600;color:var(--primary);margin-bottom:6px;">
+            <i class="ti ti-lock" style="font-size:14px;vertical-align:-2px;margin-right:5px;"></i>Configured in the admin console
+          </p>
+          <p style="font-size:12px;color:var(--primary);line-height:1.6;">
+            Set the sign-in method in <strong>Admin console → Auth &amp; SSO</strong>.
+          </p>
+        </div>
+      </div>
+
+    </div><!-- /mobile-stage -->
+  </div><!-- /view-signin -->
+
+
+  <!-- ══════════════════════════════════
+       ADMIN CONSOLE VIEW
+  ══════════════════════════════════ -->
+  <div class="mode-view" id="view-admin">
+    <div class="admin-shell">
+      <!-- Top bar -->
+      <div class="admin-topbar">
+        <div class="admin-logo">
+          <div class="admin-logo-mark"><i class="ti ti-check"></i></div>
+          Task It <span class="admin-logo-sub">Admin console</span>
+        </div>
+        <div class="avatar">EK</div>
+      </div>
+      <div class="accent-bar"></div>
+
+      <div class="admin-body">
+        <!-- Sidebar -->
+        <nav class="admin-sidebar">
+          <p class="sidebar-section">Configuration</p>
+          <div class="sidebar-item active" onclick="switchPage('overview',this)"><i class="ti ti-layout-grid"></i> Overview</div>
+          <div class="sidebar-item" onclick="switchPage('organization',this)"><i class="ti ti-building"></i> Organization</div>
+          <div class="sidebar-item" onclick="switchPage('auth',this)"><i class="ti ti-lock"></i> Auth &amp; SSO</div>
+          <div class="sidebar-item" onclick="switchPage('branding',this)"><i class="ti ti-palette"></i> Branding</div>
+          <div class="sidebar-item" onclick="switchPage('integrations',this)"><i class="ti ti-plug"></i> Integrations</div>
+          <div class="sidebar-item" onclick="switchPage('rewards',this)"><i class="ti ti-star"></i> Rewards</div>
+          <div class="sidebar-item" onclick="switchPage('landingpage',this)"><i class="ti ti-layout-navbar"></i> Landing page</div>
+          <div class="sidebar-item" onclick="switchPage('taskcreation',this)"><i class="ti ti-forms"></i> Task creation</div>
+          <div class="sidebar-item" onclick="switchPage('notifications',this)"><i class="ti ti-bell"></i> Notifications</div>
+        </nav>
+
+        <!-- Content area -->
+        <div class="admin-content">
+
+          <!-- OVERVIEW -->
+          <div class="admin-page active" id="page-overview">
+            <p class="page-title">Overview</p>
+            <p class="page-desc">Your organization's Task It activity at a glance.</p>
+            <div class="stats-grid">
+              <div class="stat-card">
+                <p class="stat-label">Employees</p>
+                <p class="stat-val">248</p>
+                <p class="stat-sub">Acme Corp</p>
+              </div>
+              <div class="stat-card">
+                <p class="stat-label">Active this week</p>
+                <p class="stat-val">189</p>
+                <p class="stat-sub stat-up">↑ 76% engagement</p>
+              </div>
+              <div class="stat-card">
+                <p class="stat-label">Avg completion</p>
+                <p class="stat-val">71%</p>
+                <p class="stat-sub">Goal completion rate</p>
+              </div>
+              <div class="stat-card">
+                <p class="stat-label">Points issued</p>
+                <p class="stat-val">84.2k</p>
+                <p class="stat-sub">June 2026</p>
+              </div>
+            </div>
+            <div class="card">
+              <p class="card-title">Top employees — June 2026</p>
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Rank</th>
+                    <th>Employee</th>
+                    <th>Department</th>
+                    <th>Goals completed</th>
+                    <th>Points earned</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span style="font-size:13px;font-weight:700;color:var(--amber);">1</span></td>
+                    <td>Marcus Chen</td><td>Engineering</td><td>42</td>
+                    <td><span class="badge badge-amber">1,240 pts</span></td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>Priya Sharma</td><td>Product</td><td>38</td>
+                    <td><span class="badge badge-blue">1,080 pts</span></td>
+                  </tr>
+                  <tr>
+                    <td>3</td>
+                    <td>Emily Kwan</td><td>Design</td><td>35</td>
+                    <td><span class="badge badge-blue">980 pts</span></td>
+                  </tr>
+                  <tr>
+                    <td>4</td>
+                    <td>Jordan Lee</td><td>Sales</td><td>31</td>
+                    <td><span class="badge badge-gray">860 pts</span></td>
+                  </tr>
+                  <tr>
+                    <td>5</td>
+                    <td>Sofia Russo</td><td>HR</td><td>29</td>
+                    <td><span class="badge badge-gray">790 pts</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- ORGANIZATION -->
+          <div class="admin-page" id="page-organization">
+            <p class="page-title">Organization</p>
+            <p class="page-desc">Manage your company profile and department structure.</p>
+            <div class="card">
+              <p class="card-title">Company info</p>
+              <div class="field-row">
+                <div><p class="field-label">Company name</p><p class="field-desc">Shown across the admin console and employee app.</p></div>
+                <input class="text-input" value="Acme Corp" />
+              </div>
+              <div class="field-row">
+                <div><p class="field-label">Industry</p><p class="field-desc">Helps tailor default goal recommendations.</p></div>
+                <select class="select-input"><option selected>Technology</option><option>Healthcare</option><option>Finance</option><option>Retail</option><option>Education</option></select>
+              </div>
+              <div class="field-row">
+                <div><p class="field-label">Company size</p><p class="field-desc">Total headcount bracket.</p></div>
+                <select class="select-input"><option>1–50</option><option>51–200</option><option selected>201–500</option><option>501–2,000</option><option>2,001+</option></select>
+              </div>
+              <div class="field-row">
+                <div><p class="field-label">Default locale</p><p class="field-desc">Language used for new employee accounts.</p></div>
+                <select class="select-input"><option selected>en-US</option><option>en-GB</option><option>fr-FR</option><option>de-DE</option><option>es-ES</option></select>
+              </div>
+            </div>
+            <div class="card">
+              <p class="card-title">Departments</p>
+              <div class="field-row">
+                <div><p class="field-label">Engineering</p><p class="field-desc">62 active employees</p></div>
+                <span class="badge badge-blue">Active</span>
+              </div>
+              <div class="field-row">
+                <div><p class="field-label">Product</p><p class="field-desc">28 active employees</p></div>
+                <span class="badge badge-blue">Active</span>
+              </div>
+              <div class="field-row">
+                <div><p class="field-label">Design</p><p class="field-desc">19 active employees</p></div>
+                <span class="badge badge-blue">Active</span>
+              </div>
+              <div class="field-row">
+                <div><p class="field-label">Sales</p><p class="field-desc">74 active employees</p></div>
+                <span class="badge badge-blue">Active</span>
+              </div>
+              <div class="field-row">
+                <div><p class="field-label">HR</p><p class="field-desc">15 active employees</p></div>
+                <span class="badge badge-blue">Active</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- AUTH -->
+          <div class="admin-page" id="page-auth">
+            <p class="page-title">Authentication</p>
+            <p class="page-desc">Choose how employees in your organization sign in to Task It.</p>
+            <div class="card">
+              <p class="card-title">Sign-in method</p>
+              <div class="radio-option-group">
+                <label class="radio-option" onclick="selectAuthMethod('taskit')">
+                  <div class="radio-dot" id="radio-auth-taskit"></div>
+                  <div>
+                    <p class="field-label">Task It accounts</p>
+                    <p class="field-desc">Employees create an email and password directly in Task It. Task It manages credentials, MFA, and password resets.</p>
+                  </div>
+                </label>
+                <label class="radio-option" onclick="selectAuthMethod('sso')" style="border-bottom:none;">
+                  <div class="radio-dot active" id="radio-auth-sso"></div>
+                  <div>
+                    <p class="field-label">Enterprise SSO</p>
+                    <p class="field-desc">Employees sign in using their existing corporate identity provider — Okta, Azure AD, Google Workspace, and others. Access is tied to employment status automatically.</p>
+                  </div>
+                </label>
+              </div>
+            </div>
+            <div class="card" id="sso-config-card">
+              <p class="card-title">SSO configuration</p>
+              <div class="field-row">
+                <div><p class="field-label">Protocol</p><p class="field-desc">Authentication protocol used by your identity provider.</p></div>
+                <select class="select-input"><option selected>SAML 2.0</option><option>OIDC</option></select>
+              </div>
+              <div class="field-row">
+                <div><p class="field-label">Identity provider URL</p><p class="field-desc">The SSO endpoint URL provided by your IdP.</p></div>
+                <input class="text-input" value="https://idp.example.com/sso" />
+              </div>
+              <div class="field-row" style="border-bottom:none;">
+                <div><p class="field-label">Entity ID</p><p class="field-desc">Unique identifier for your organization's service provider.</p></div>
+                <input class="text-input" value="taskit-acme-corp" />
+              </div>
+            </div>
+            <div class="card">
+              <p class="card-title">Session</p>
+              <div class="field-row" style="border-bottom:none;">
+                <div><p class="field-label">Session timeout</p><p class="field-desc">Duration before an idle session expires and requires re-authentication.</p></div>
+                <select class="select-input"><option>30 minutes</option><option selected>1 hour</option><option>4 hours</option><option>8 hours</option></select>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- BRANDING -->
+          <div class="admin-page" id="page-branding">
+            <p class="page-title">Branding</p>
+            <p class="page-desc">Customize how Task It looks for your employees.</p>
+            <div class="card">
+              <p class="card-title">Logo</p>
+              <div class="field-row">
+                <div>
+                  <p class="field-label">App logo</p>
+                  <p class="field-desc">Shown in the mobile app top bar. PNG or SVG, min 64×64 px.</p>
+                </div>
+                <div style="display:flex;align-items:center;gap:12px;">
+                  <div style="width:48px;height:48px;border-radius:8px;background:var(--bg-2);border:0.5px solid var(--border);display:flex;align-items:center;justify-content:center;">
+                    <i class="ti ti-check" style="font-size:22px;color:var(--primary);"></i>
+                  </div>
+                  <button style="font-size:12px;padding:6px 14px;border-radius:var(--r-md);border:0.5px solid var(--border);background:var(--bg-2);color:var(--text);cursor:pointer;">Upload logo</button>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <p class="card-title">Brand colors</p>
+              <div class="field-row">
+                <div><p class="field-label">Primary color</p><p class="field-desc">Used for buttons, active states, and key UI elements.</p></div>
+                <div class="color-swatch">
+                  <div class="swatch" style="background:#0C447C;"></div>
+                  <span class="swatch-code">#0C447C</span>
+                </div>
+              </div>
+              <div class="field-row">
+                <div><p class="field-label">Accent color</p><p class="field-desc">Used for points badges, the accent bar, and highlights.</p></div>
+                <div class="color-swatch">
+                  <div class="swatch" style="background:#EF9F27;"></div>
+                  <span class="swatch-code">#EF9F27</span>
+                </div>
+              </div>
+              <div class="field-row">
+                <div><p class="field-label">App name override</p><p class="field-desc">Replace "Task It" with a custom name in the employee app.</p></div>
+                <input class="text-input" placeholder="e.g. Acme Wellness" />
+              </div>
+            </div>
+          </div>
+
+          <!-- INTEGRATIONS -->
+          <div class="admin-page" id="page-integrations">
+            <p class="page-title">Integrations</p>
+            <p class="page-desc">Choose which integrations are available to your employees.</p>
+
+            <div class="card">
+              <p class="card-title">Page header</p>
+              <div class="field-row">
+                <div><p class="field-label">Heading</p><p class="field-desc">Title shown at the top of the Connected Apps screen in the employee app.</p></div>
+                <input class="text-input" value="Connected apps" style="min-width:220px;" oninput="document.getElementById('apps-heading').textContent=this.value||'Connected apps'" />
+              </div>
+              <div class="field-row" style="border-bottom:none;">
+                <div><p class="field-label">Description</p><p class="field-desc">Subtitle shown below the heading.</p></div>
+                <input class="text-input" value="Sync your calendars and tools." style="min-width:220px;" oninput="document.getElementById('apps-desc').textContent=this.value||'Sync your calendars and tools.'" />
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="field-row" style="align-items:center;">
+                <div style="display:flex;align-items:center;gap:14px;flex:1;">
+                  <div id="admin-icon-jira" style="width:40px;height:40px;border-radius:8px;background:var(--blue-light);color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;"><i class="ti ti-brand-trello"></i></div>
+                  <div><p class="field-label">Jira</p><p class="field-desc">Employees can sync Jira issues as work tasks in Task It. Requires a Jira Cloud organization.</p></div>
+                </div>
+                <div class="field-right">
+                  <span class="badge badge-blue" id="b-jira">Enabled</span>
+                  <div class="toggle toggle-on" onclick="adminToggle(this,'b-jira')"></div>
+                </div>
+              </div>
+              <div class="field-row" style="align-items:center;">
+                <div style="display:flex;align-items:center;gap:14px;flex:1;">
+                  <div id="admin-icon-gcal" style="width:40px;height:40px;border-radius:8px;background:var(--amber-bg);color:#633806;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;"><i class="ti ti-calendar"></i></div>
+                  <div><p class="field-label">Google Calendar</p><p class="field-desc">Employees can pull Google Calendar events into their Task It daily view.</p></div>
+                </div>
+                <div class="field-right">
+                  <span class="badge badge-blue" id="b-gcal">Enabled</span>
+                  <div class="toggle toggle-on" onclick="adminToggle(this,'b-gcal')"></div>
+                </div>
+              </div>
+              <div class="field-row" style="align-items:center;">
+                <div style="display:flex;align-items:center;gap:14px;flex:1;">
+                  <div id="admin-icon-apple" style="width:40px;height:40px;border-radius:8px;background:#F3F4F6;color:#374151;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;"><i class="ti ti-heartbeat"></i></div>
+                  <div><p class="field-label">Apple Health</p><p class="field-desc">Allow employees to sync Apple Health data to automatically complete health goals.</p></div>
+                </div>
+                <div class="field-right">
+                  <span class="badge badge-gray" id="b-apple">Disabled</span>
+                  <div class="toggle toggle-off" onclick="adminToggle(this,'b-apple')"></div>
+                </div>
+              </div>
+              <div class="field-row" style="align-items:center;">
+                <div style="display:flex;align-items:center;gap:14px;flex:1;">
+                  <div id="admin-icon-ghealth" style="width:40px;height:40px;border-radius:8px;background:#E8F5E9;color:#2E7D32;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;"><i class="ti ti-heart-rate-monitor"></i></div>
+                  <div><p class="field-label">Google Health</p><p class="field-desc">Allow employees to sync Google Health fitness data to automatically complete health goals.</p></div>
+                </div>
+                <div class="field-right">
+                  <span class="badge badge-gray" id="b-ghealth">Disabled</span>
+                  <div class="toggle toggle-off" onclick="adminToggle(this,'b-ghealth')"></div>
+                </div>
+              </div>
+              <div class="field-row" style="align-items:center;">
+                <div style="display:flex;align-items:center;gap:14px;flex:1;">
+                  <div id="admin-icon-garmin" style="width:40px;height:40px;border-radius:8px;background:#FFF3E0;color:#E65100;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;"><i class="ti ti-run"></i></div>
+                  <div><p class="field-label">Garmin</p><p class="field-desc">Allow employees to sync Garmin activity and step data to complete health goals.</p></div>
+                </div>
+                <div class="field-right">
+                  <span class="badge badge-gray" id="b-garmin">Disabled</span>
+                  <div class="toggle toggle-off" onclick="adminToggle(this,'b-garmin')"></div>
+                </div>
+              </div>
+              <div class="field-row" style="align-items:center;">
+                <div style="display:flex;align-items:center;gap:14px;flex:1;">
+                  <div id="admin-icon-fitbit" style="width:40px;height:40px;border-radius:8px;background:#FCE4EC;color:#C62828;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;"><i class="ti ti-activity"></i></div>
+                  <div><p class="field-label">Fitbit</p><p class="field-desc">Allow employees to sync Fitbit activity and sleep data to complete health goals.</p></div>
+                </div>
+                <div class="field-right">
+                  <span class="badge badge-gray" id="b-fitbit">Disabled</span>
+                  <div class="toggle toggle-off" onclick="adminToggle(this,'b-fitbit')"></div>
+                </div>
+              </div>
+            </div>
+            <div class="info-banner">
+              <i class="ti ti-info-circle"></i>
+              Disabling an integration removes it from the employee-facing app. Employees who have already connected an account will be disconnected automatically.
+            </div>
+          </div>
+
+          <!-- REWARDS -->
+          <div class="admin-page" id="page-rewards">
+            <p class="page-title">Rewards</p>
+            <p class="page-desc">Configure how rewards are labeled and how many points each task or goal is worth.</p>
+
+            <div class="card">
+              <p class="card-title">Reward type</p>
+              <div class="field-row">
+                <div>
+                  <p class="field-label">Reward label</p>
+                  <p class="field-desc">The unit shown throughout the app. Leave as "points" or enter a custom name (e.g. "coins", "gems", "credits").</p>
+                </div>
+                <input class="text-input" id="reward-label-input" value="points" style="min-width:180px;" oninput="updateRewardLabel(this.value)" />
+              </div>
+              <div class="field-row">
+                <div>
+                  <p class="field-label">Reward label preview</p>
+                  <p class="field-desc">How the label appears in the employee app header and rewards screen.</p>
+                </div>
+                <div style="display:flex;gap:8px;align-items:center;">
+                  <span style="font-size:13px;background:var(--bg-2);border:0.5px solid var(--border);border-radius:var(--r-md);padding:5px 12px;color:var(--text);">340 <span id="reward-label-preview">points</span> available</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <p class="card-title">Rewards section heading</p>
+              <div class="field-row">
+                <div>
+                  <p class="field-label">Section heading</p>
+                  <p class="field-desc">Shown above the rewards list in the employee app.</p>
+                </div>
+                <input class="text-input" value="Redeem rewards" style="min-width:220px;" oninput="document.getElementById('rewards-section-heading').textContent = this.value || 'Redeem rewards'" />
+              </div>
+            </div>
+
+            <div class="card">
+              <p class="card-title">Reward catalog</p>
+              <p style="font-size:12px;color:var(--text-2);margin-bottom:14px;">Build the list of rewards employees can redeem. Use any <a href="https://tabler.io/icons" target="_blank" style="color:var(--primary);">Tabler icon</a> name, or leave blank for no icon.</p>
+              <div class="catalog-header">
+                <span style="width:34px;flex-shrink:0;"></span>
+                <span class="catalog-col-label" style="flex:1;">Name</span>
+                <span class="catalog-col-label" style="width:72px;">Cost</span>
+                <span style="width:28px;"></span>
+                <span class="catalog-col-label" style="width:130px;">Icon</span>
+                <span style="width:32px;"></span>
+              </div>
+              <div id="catalog-list"></div>
+              <button class="add-reward-btn" onclick="addReward()"><i class="ti ti-plus"></i> Add reward</button>
+            </div>
+
+            <div class="card">
+              <p class="card-title">Button copy</p>
+              <p style="font-size:12px;color:var(--text-2);margin-bottom:12px;">Customize the text shown on the redeem button in each of its three states.</p>
+              <div class="field-row" style="align-items:center;">
+                <div>
+                  <p class="field-label">Default</p>
+                  <p class="field-desc">Shown when the employee has enough points to redeem.</p>
+                </div>
+                <input class="text-input" id="btn-idle-input" value="Redeem" style="min-width:180px;" oninput="redeemCopy.idle=this.value||'Redeem'" />
+              </div>
+              <div class="field-row" style="align-items:center;">
+                <div>
+                  <p class="field-label">Redeemed</p>
+                  <p class="field-desc">Shown briefly after a successful redemption.</p>
+                </div>
+                <input class="text-input" id="btn-done-input" value="Redeemed ✓" style="min-width:180px;" oninput="redeemCopy.done=this.value||'Redeemed ✓'" />
+              </div>
+              <div class="field-row" style="align-items:center;">
+                <div>
+                  <p class="field-label">Insufficient balance</p>
+                  <p class="field-desc">Shown briefly when the employee doesn't have enough points.</p>
+                </div>
+                <input class="text-input" id="btn-low-input" value="Need more pts" style="min-width:180px;" oninput="redeemCopy.low=this.value||'Need more pts'" />
+              </div>
+            </div>
+
+            <div class="card">
+              <p class="card-title">Points by category</p>
+              <p style="font-size:12px;color:var(--text-2);margin-bottom:14px;">Set how many points are awarded when an employee completes a task or goal in each category. Enter 0 to award no points.</p>
+              <div class="pts-cat-header">
+                <span style="flex:1;"></span>
+                <span class="catalog-col-label" style="width:100px;text-align:right;">Per task</span>
+                <span class="catalog-col-label" style="width:100px;text-align:right;">Per goal</span>
+              </div>
+              <div class="field-row pts-cat-row" style="align-items:center;">
+                <div style="display:flex;align-items:center;gap:10px;flex:1;">
+                  <div class="cat-icon cat-icon-work"><i class="ti ti-briefcase"></i></div>
+                  <div><p class="field-label">Work</p></div>
+                </div>
+                <div class="pts-cat-cell"><input class="pts-input" type="number" min="0" value="15" /><span class="pts-unit">pts</span></div>
+                <div class="pts-cat-cell"><input class="pts-input" type="number" min="0" value="30" /><span class="pts-unit">pts</span></div>
+              </div>
+              <div class="field-row pts-cat-row" style="align-items:center;">
+                <div style="display:flex;align-items:center;gap:10px;flex:1;">
+                  <div class="cat-icon cat-icon-personal"><i class="ti ti-heart"></i></div>
+                  <div><p class="field-label">Personal</p></div>
+                </div>
+                <div class="pts-cat-cell"><input class="pts-input" type="number" min="0" value="10" /><span class="pts-unit">pts</span></div>
+                <div class="pts-cat-cell"><input class="pts-input" type="number" min="0" value="25" /><span class="pts-unit">pts</span></div>
+              </div>
+              <div class="field-row pts-cat-row" style="align-items:center;">
+                <div style="display:flex;align-items:center;gap:10px;flex:1;">
+                  <div class="cat-icon cat-icon-health"><i class="ti ti-activity-heartbeat"></i></div>
+                  <div><p class="field-label">Health</p></div>
+                </div>
+                <div class="pts-cat-cell"><input class="pts-input" type="number" min="0" value="20" /><span class="pts-unit">pts</span></div>
+                <div class="pts-cat-cell"><input class="pts-input" type="number" min="0" value="20" /><span class="pts-unit">pts</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- LANDING PAGE -->
+          <div class="admin-page" id="page-landingpage">
+            <p class="page-title">Landing page</p>
+            <p class="page-desc">Customize the home screen header and how tasks and goals are organized for employees.</p>
+
+            <div class="card">
+              <p class="card-title">Home screen header</p>
+              <p style="font-size:12px;color:var(--text-2);margin-bottom:4px;">Customize the greeting shown at the top of the employee home screen. Use variables to personalize the text.</p>
+              <div class="var-chips">
+                <span class="var-chip">{Name}</span><span class="var-chip-desc">employee first name</span>
+                <span class="var-chip">{#}</span><span class="var-chip-desc">tasks completed</span>
+                <span class="var-chip">{total}</span><span class="var-chip-desc">total tasks today</span>
+                <span class="var-chip">{streak}</span><span class="var-chip-desc">current streak count</span>
+              </div>
+
+              <div class="header-row">
+                <div class="header-row-left">
+                  <div class="toggle toggle-on" id="toggle-greeting" onclick="headerToggle('greeting')"></div>
+                  <div>
+                    <p class="field-label">Greeting</p>
+                    <p class="field-desc">First line shown in large text on the home screen.</p>
+                  </div>
+                </div>
+                <input class="text-input" id="input-greeting" value="Good morning, {Name}" style="min-width:260px;" />
+              </div>
+              <div class="header-row">
+                <div class="header-row-left">
+                  <div class="toggle toggle-on" id="toggle-progress" onclick="headerToggle('progress')"></div>
+                  <div>
+                    <p class="field-label">Progress</p>
+                    <p class="field-desc">Shows task completion progress for the day.</p>
+                  </div>
+                </div>
+                <input class="text-input" id="input-progress" value="{#} of {total} tasks done" style="min-width:260px;" />
+              </div>
+              <div class="header-row" style="border-bottom:none;">
+                <div class="header-row-left">
+                  <div class="toggle toggle-on" id="toggle-streak" onclick="headerToggle('streak')"></div>
+                  <div>
+                    <p class="field-label">Streak</p>
+                    <p class="field-desc">Shows the employee's current consecutive-day streak.</p>
+                  </div>
+                </div>
+                <input class="text-input" id="input-streak" value="{streak}-day streak" style="min-width:260px;" />
+              </div>
+            </div>
+
+            <div class="card">
+              <p class="card-title">Task &amp; goal categories</p>
+              <p style="font-size:12px;color:var(--text-2);margin-bottom:16px;">Choose how tasks and goals are grouped on the employee home screen.</p>
+              <div class="radio-option-group">
+                <label class="radio-option" onclick="selectCategory('none',this)">
+                  <div class="radio-dot active" id="radio-none"></div>
+                  <div>
+                    <p class="field-label">No categories</p>
+                    <p class="field-desc">Tasks and goals shown in a single flat list.</p>
+                  </div>
+                </label>
+                <label class="radio-option" onclick="selectCategory('time',this)">
+                  <div class="radio-dot" id="radio-time"></div>
+                  <div>
+                    <p class="field-label">Time-based</p>
+                    <p class="field-desc">Grouped by due date: Today, Tomorrow, Next 7 days, Next 30 days.</p>
+                  </div>
+                </label>
+                <label class="radio-option" onclick="selectCategory('theme',this)" style="border-bottom:none;">
+                  <div class="radio-dot" id="radio-theme"></div>
+                  <div>
+                    <p class="field-label">By theme</p>
+                    <p class="field-desc">Grouped by category: Work, Personal, Health.</p>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <div class="card">
+              <p class="card-title">Features</p>
+              <div class="field-row" style="border-bottom:none;">
+                <div><p class="field-label">Streaks</p><p class="field-desc">Show consecutive-day activity streaks in the employee app header and stats.</p></div>
+                <div class="field-right">
+                  <span class="badge badge-blue" id="b-streaks">Enabled</span>
+                  <div class="toggle toggle-on" onclick="adminToggle(this,'b-streaks')"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TASK CREATION -->
+          <div class="admin-page" id="page-taskcreation">
+            <p class="page-title">Task creation</p>
+            <p class="page-desc">Customize the copy shown in the task creation sheet in the employee app.</p>
+
+            <div class="card">
+              <p class="card-title">Sheet heading</p>
+              <div class="field-row" style="border-bottom:none;">
+                <div>
+                  <p class="field-label">Heading</p>
+                  <p class="field-desc">Title shown at the top of the task creation sheet.</p>
+                </div>
+                <input class="text-input" value="Add a task" style="min-width:220px;" oninput="document.getElementById('sheet-heading').textContent=this.value||'Add a task'" />
+              </div>
+            </div>
+
+            <div class="card">
+              <p class="card-title">Section headings</p>
+              <div class="field-row">
+                <div>
+                  <p class="field-label">Task name</p>
+                  <p class="field-desc">Label shown above the task name input.</p>
+                </div>
+                <input class="text-input" value="Task name" style="min-width:220px;" oninput="document.getElementById('sheet-label-task').textContent=this.value||'Task name'" />
+              </div>
+              <div class="field-row">
+                <div>
+                  <p class="field-label">Category</p>
+                  <p class="field-desc">Label shown above the category dropdown.</p>
+                </div>
+                <input class="text-input" value="Category" style="min-width:220px;" oninput="document.getElementById('sheet-label-cat').textContent=this.value||'Category'" />
+              </div>
+              <div class="field-row">
+                <div>
+                  <p class="field-label">Recurrence</p>
+                  <p class="field-desc">Label shown above the recurrence dropdown.</p>
+                </div>
+                <input class="text-input" value="Recurrence" style="min-width:220px;" oninput="document.getElementById('sheet-label-recur').textContent=this.value||'Recurrence'" />
+              </div>
+              <div class="field-row" style="border-bottom:none;">
+                <div>
+                  <p class="field-label">Link to a goal</p>
+                  <p class="field-desc">Label shown next to the goal link toggle.</p>
+                </div>
+                <input class="text-input" value="Link to a goal" style="min-width:220px;" oninput="document.getElementById('sheet-label-goal').textContent=this.value||'Link to a goal'" />
+              </div>
+            </div>
+
+            <div class="card">
+              <p class="card-title">Placeholder copy</p>
+              <div class="field-row">
+                <div>
+                  <p class="field-label">Task name</p>
+                  <p class="field-desc">Placeholder text shown in the task name input.</p>
+                </div>
+                <input class="text-input" value="e.g. Drink 8 glasses of water" style="min-width:260px;" oninput="document.getElementById('new-task-name').placeholder=this.value||'e.g. Drink 8 glasses of water'" />
+              </div>
+              <div class="field-row" style="border-bottom:none;">
+                <div>
+                  <p class="field-label">Goal name</p>
+                  <p class="field-desc">Placeholder text shown in the goal name input when linking a task to a goal.</p>
+                </div>
+                <input class="text-input" value="Goal name, e.g. Run a 5K" style="min-width:260px;" oninput="document.getElementById('new-goal-name').placeholder=this.value||'Goal name, e.g. Run a 5K'" />
+              </div>
+            </div>
+
+            <div class="card">
+              <p class="card-title">CTA copy</p>
+              <div class="field-row" style="border-bottom:none;">
+                <div>
+                  <p class="field-label">Add task button</p>
+                  <p class="field-desc">Text shown on the primary button that submits the new task.</p>
+                </div>
+                <input class="text-input" value="Add task" style="min-width:220px;" oninput="document.getElementById('sheet-cta').textContent=this.value||'Add task'" />
+              </div>
+            </div>
+
+            <div class="card">
+              <p class="card-title">Task limits</p>
+              <div class="field-row" style="border-bottom:none;">
+                <div>
+                  <p class="field-label">Maximum tasks per user</p>
+                  <p class="field-desc">The maximum number of tasks a user can create. Leave blank for no limit.</p>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <input class="text-input" type="number" min="1" placeholder="No limit" style="min-width:120px;text-align:right;" />
+                  <span style="font-size:12px;color:var(--text-2);">tasks</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- NOTIFICATIONS -->
+          <div class="admin-page" id="page-notifications">
+            <p class="page-title">Notifications</p>
+            <p class="page-desc">Configure push notification reminders to help employees stay on top of their tasks.</p>
+
+            <div class="card">
+              <p class="card-title">Push notifications</p>
+              <div class="field-row" style="border-bottom:none;align-items:center;">
+                <div>
+                  <p class="field-label">Enable push notifications</p>
+                  <p class="field-desc">When enabled, employees receive push notification reminders for incomplete tasks. Employees must grant notification permission on their device.</p>
+                </div>
+                <div class="field-right">
+                  <span class="badge badge-blue" id="b-notif">Enabled</span>
+                  <div class="toggle toggle-on" id="toggle-notif" onclick="toggleNotifications()"></div>
+                </div>
+              </div>
+            </div>
+
+            <div id="notif-config-section">
+              <div class="card">
+                <p class="card-title">Reminder timing</p>
+                <div class="field-row" style="border-bottom:none;">
+                  <div>
+                    <p class="field-label">Remind me</p>
+                    <p class="field-desc">When employees receive a reminder notification for incomplete tasks.</p>
+                  </div>
+                  <div style="display:flex;flex-direction:column;align-items:flex-end;gap:10px;">
+                    <div class="mode-tabs">
+                      <button id="notif-tab-time" class="mode-tab active" onclick="notifModeSwitch('time')">At a time</button>
+                      <button id="notif-tab-before" class="mode-tab" onclick="notifModeSwitch('before')">Before due date</button>
+                    </div>
+                    <div id="notif-mode-time">
+                      <input class="text-input" type="time" id="notif-time" value="17:00" style="min-width:160px;" />
+                    </div>
+                    <div id="notif-mode-before" style="display:none;">
+                      <select class="select-input" id="notif-minutes" style="min-width:180px;">
+                        <option value="30">30 minutes before</option>
+                        <option value="60" selected>1 hour before</option>
+                        <option value="120">2 hours before</option>
+                        <option value="1440">1 day before</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card">
+                <p class="card-title">Notification copy</p>
+                <p style="font-size:12px;color:var(--text-2);margin-bottom:4px;">Customize the message sent to employees. Use variables to personalize the text.</p>
+                <div class="var-chips">
+                  <span class="var-chip">{firstName}</span><span class="var-chip-desc">employee first name</span>
+                  <span class="var-chip">{taskName}</span><span class="var-chip-desc">task name</span>
+                  <span class="var-chip">{appName}</span><span class="var-chip-desc">app name</span>
+                </div>
+                <div class="field-row">
+                  <div>
+                    <p class="field-label">Title</p>
+                    <p class="field-desc">Short headline shown in the notification banner.</p>
+                  </div>
+                  <input class="text-input" id="notif-title-input" value="Don't forget: {taskName}" style="min-width:280px;" oninput="notifPreviewUpdate()" />
+                </div>
+                <div class="field-row" style="border-bottom:none;">
+                  <div>
+                    <p class="field-label">Body</p>
+                    <p class="field-desc">Supporting message shown below the title.</p>
+                  </div>
+                  <input class="text-input" id="notif-body-input" value="Hi {firstName}, you still have tasks to complete today." style="min-width:280px;" oninput="notifPreviewUpdate()" />
+                </div>
+              </div>
+
+              <div class="card">
+                <p class="card-title">Notification preview</p>
+                <p style="font-size:12px;color:var(--text-2);margin-bottom:14px;">A preview of how the notification appears on an employee's device, using sample values.</p>
+                <div style="background:#1C1C1E;border-radius:14px;padding:14px 16px;max-width:340px;display:flex;align-items:flex-start;gap:12px;">
+                  <div style="width:36px;height:36px;border-radius:9px;background:var(--amber);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                    <i class="ti ti-check" style="font-size:16px;color:var(--amber-dark);"></i>
+                  </div>
+                  <div style="flex:1;min-width:0;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;">
+                      <span style="font-size:11px;font-weight:500;color:rgba(255,255,255,0.5);letter-spacing:0.05em;">TASK IT</span>
+                      <span style="font-size:11px;color:rgba(255,255,255,0.4);">now</span>
+                    </div>
+                    <p id="notif-preview-title" style="font-size:13px;font-weight:600;color:#fff;margin-bottom:2px;word-break:break-word;">Don't forget: 30-min walk</p>
+                    <p id="notif-preview-body" style="font-size:12px;color:rgba(255,255,255,0.75);line-height:1.4;word-break:break-word;">Hi Emily, you still have tasks to complete today.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Save bar -->
+          <div class="save-bar" id="admin-save-bar">
+            <p class="save-bar-msg"><i class="ti ti-circle-dot-filled"></i>You have unsaved changes</p>
+            <button class="save-btn" id="admin-save-btn" onclick="saveChanges()">
+              <i class="ti ti-loader save-btn-spinner"></i>
+              <span class="save-btn-label">Save changes</span>
+            </button>
+          </div>
+
+        </div><!-- /admin-content -->
+      </div><!-- /admin-body -->
+    </div><!-- /admin-shell -->
+  </div><!-- /view-admin -->
+
+</main>
+
+<script>
+// ── State ──
+let points = 340;
+let doneTasks = 2;
+const TOTAL = 7;
+
+// ── Mode switching ──
+function switchMode(mode) {
+  document.querySelectorAll('.mode-view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.mode-tab').forEach(t => t.classList.toggle('active', t.dataset.mode === mode));
+  document.getElementById('view-' + mode).classList.add('active');
+}
+
+// ── Bottom sheet ──
+function openAddSheet() {
+  document.getElementById('add-sheet').classList.add('open');
+  document.getElementById('sheet-backdrop').classList.add('open');
+  setTimeout(() => document.getElementById('new-task-name').focus(), 260);
+}
+
+function closeAddSheet() {
+  document.getElementById('add-sheet').classList.remove('open');
+  document.getElementById('sheet-backdrop').classList.remove('open');
+}
+
+// ── Phone tab switching ──
+function switchTab(name, el) {
+  closeTaskDetail();
+  closeAddSheet();
+  document.querySelectorAll('.phone-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.phone-nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  el.classList.add('active');
+  document.getElementById('phone-fab').style.display = name === 'today' ? 'flex' : 'none';
+}
+
+// ── Task toggle ──
+function toggleTask(row, pts) {
+  const check = row.querySelector('.phone-check');
+  const label = row.querySelector('.task-label');
+  const done  = check.classList.contains('done');
+  if (done) {
+    check.classList.remove('done');
+    check.innerHTML = '';
+    label.classList.remove('done');
+    if (pts > 0) { points -= pts; doneTasks = Math.max(0, doneTasks - 1); }
+  } else {
+    check.classList.add('done');
+    check.innerHTML = '<i class="ti ti-check" style="font-size:8px;color:white;"></i>';
+    label.classList.add('done');
+    if (pts > 0) { points += pts; doneTasks = Math.min(TOTAL, doneTasks + 1); }
+  }
+  syncPoints();
+}
+
+function syncPoints() {
+  document.getElementById('pts-display').textContent = points + ' pts';
+  document.getElementById('pts-stat').textContent    = points;
+  document.getElementById('rewards-pts').textContent = points;
+  document.getElementById('today-sub').textContent   = doneTasks + ' of ' + TOTAL + ' goals done · 14-day streak';
+}
+
+// ── Task store ──
+const taskStore = {
+  t0: { name: 'Morning walk',        cat: 'health',   pts: 20, recur: 'daily',  goalName: '',                    goalDate: '' },
+  t1: { name: 'Medication',          cat: 'health',   pts: 10, recur: 'daily',  goalName: '',                    goalDate: '' },
+  t2: { name: 'Standup — 10:00 AM',  cat: 'work',     pts: 0,  recur: 'daily',  goalName: '',                    goalDate: '' },
+  t3: { name: 'Floss',               cat: 'personal', pts: 5,  recur: 'daily',  goalName: '',                    goalDate: '' },
+  t4: { name: '30-min walk',         cat: 'health',   pts: 15, recur: 'daily',  goalName: 'Walk 30 days in a row', goalDate: '2026-07-31' },
+  t5: { name: 'Read 20 pages',       cat: 'personal', pts: 25, recur: 'daily',  goalName: 'Read 12 books this year', goalDate: '2026-12-31' },
+  t6: { name: 'Team 1:1 — 2:30 PM', cat: 'work',     pts: 0,  recur: 'weekly', goalName: '',                    goalDate: '' },
+};
+let taskIdCounter = 7;
+
+const catIconMap  = { health: 'ti-activity-heartbeat', work: 'ti-briefcase', personal: 'ti-heart' };
+const catClassMap = { health: 'goal-icon-health',      work: 'goal-icon-work', personal: 'goal-icon-personal' };
+
+let currentTaskId = null;
+
+function openTaskDetail(taskId) {
+  const task = taskStore[taskId];
+  if (!task) return;
+  currentTaskId = taskId;
+
+  document.getElementById('td-title').textContent = task.name;
+  const recurLabel = task.recur === 'daily' ? 'Daily' : task.recur === 'weekly' ? 'Weekly' : 'One-time';
+  const catLabel   = task.cat.charAt(0).toUpperCase() + task.cat.slice(1);
+  document.getElementById('td-meta').textContent = catLabel + ' · ' + recurLabel;
+
+  const iconEl = document.getElementById('td-icon');
+  iconEl.className = 'goal-icon ' + catClassMap[task.cat];
+  iconEl.style.cssText = 'width:38px;height:38px;';
+  iconEl.innerHTML = '<i class="ti ' + catIconMap[task.cat] + '" style="font-size:18px;"></i>';
+
+  const ptsEl = document.getElementById('td-pts');
+  if (task.pts > 0) { ptsEl.textContent = '+' + task.pts + ' pts'; ptsEl.style.display = ''; }
+  else { ptsEl.style.display = 'none'; }
+
+  const goalSection = document.getElementById('td-goal-section');
+  if (task.goalName) {
+    document.getElementById('td-goal-name').textContent = task.goalName;
+    document.getElementById('td-goal-date').textContent = task.goalDate ? 'Ends ' + formatDate(task.goalDate) : 'No end date set';
+    goalSection.style.display = 'block';
+  } else {
+    goalSection.style.display = 'none';
+  }
+
+  const row    = document.querySelector('[data-task-id="' + taskId + '"]');
+  const isDone = row && row.querySelector('.phone-check').classList.contains('done');
+  const btn    = document.getElementById('td-complete-btn');
+  btn.textContent      = isDone ? 'Completed today ✓' : 'Mark complete today';
+  btn.style.background = isDone ? '#2D7A4F' : '';
+
+  document.getElementById('task-detail').classList.add('open');
+}
+
+function closeTaskDetail() {
+  document.getElementById('task-detail').classList.remove('open');
+  currentTaskId = null;
+}
+
+function toggleTaskFromDetail() {
+  if (!currentTaskId) return;
+  const row  = document.querySelector('[data-task-id="' + currentTaskId + '"]');
+  if (!row) return;
+  const task = taskStore[currentTaskId];
+  toggleTask(row, task.pts);
+  const isDone = row.querySelector('.phone-check').classList.contains('done');
+  const btn    = document.getElementById('td-complete-btn');
+  btn.textContent      = isDone ? 'Completed today ✓' : 'Mark complete today';
+  btn.style.background = isDone ? '#2D7A4F' : '';
+  if (isDone) setTimeout(() => closeTaskDetail(), 800);
+}
+
+function formatDate(dateStr) {
+  if (!dateStr) return '';
+  const d = new Date(dateStr + 'T00:00:00');
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+function toggleGoalLink() {
+  const toggle = document.getElementById('toggle-goal-link');
+  const fields = document.getElementById('goal-link-fields');
+  const on = toggle.classList.contains('toggle-on');
+  toggle.classList.toggle('toggle-on',  !on);
+  toggle.classList.toggle('toggle-off',  on);
+  fields.style.display = on ? 'none' : 'block';
+  if (!on) document.getElementById('new-goal-name').focus();
+}
+
+// ── Connect / disconnect (user apps) ──
+function connectApp(id) {
+  document.getElementById('connect-' + id).classList.add('connected');
+}
+function disconnectApp(id) {
+  document.getElementById('connect-' + id).classList.remove('connected');
+}
+
+// ── Redeem ──
+function redeem(btn, cost) {
+  if (points >= cost) {
+    points -= cost;
+    syncPoints();
+    btn.textContent = redeemCopy.done;
+    btn.style.cssText = 'background:var(--blue-light);border-color:var(--blue-border);color:var(--primary);';
+    btn.disabled = true;
+    setTimeout(() => { btn.textContent = redeemCopy.idle; btn.style = ''; btn.disabled = false; }, 2200);
+  } else {
+    btn.textContent = redeemCopy.low;
+    btn.style.cssText = 'border-color:#FCA5A5;color:#991B1B;';
+    setTimeout(() => { btn.textContent = redeemCopy.idle; btn.style = ''; }, 1600);
+  }
+}
+
+// ── Create task ──
+function createTask() {
+  const name = document.getElementById('new-task-name').value.trim();
+  if (!name) { document.getElementById('new-task-name').focus(); return; }
+
+  const cat   = document.getElementById('new-task-cat').value;
+  const recur = document.getElementById('new-task-recur').value;
+  const pts   = 10;
+
+  const goalLinkOn = document.getElementById('toggle-goal-link').classList.contains('toggle-on');
+  const goalName   = goalLinkOn ? document.getElementById('new-goal-name').value.trim() : '';
+  const goalDate   = goalLinkOn ? document.getElementById('new-goal-date').value : '';
+
+  const taskId = 't' + taskIdCounter++;
+  taskStore[taskId] = { name, cat, pts, recur, goalName, goalDate };
+
+  // Append to today list
+  const list = document.querySelector('#tab-today .phone-card');
+  const row  = document.createElement('div');
+  row.className = 'phone-task';
+  row.dataset.taskId = taskId;
+  row.setAttribute('onclick', 'openTaskDetail("' + taskId + '")');
+
+  const checkHtml = '<div class="phone-check" onclick="event.stopPropagation();toggleTask(this.closest(\'.phone-task\'),' + pts + ')"></div>';
+  const ptsHtml   = pts > 0 ? '<span class="phone-pts">+' + pts + '</span>' : '<span class="badge badge-navy">' + escHtml(cat.charAt(0).toUpperCase() + cat.slice(1)) + '</span>';
+  const goalBadge = goalName ? '<i class="ti ti-target" style="font-size:12px;color:var(--primary);flex-shrink:0;" title="' + escHtml(goalName) + '"></i>' : '';
+  row.innerHTML = checkHtml + '<span class="task-label">' + escHtml(name) + '</span>' + ptsHtml + goalBadge;
+  list.appendChild(row);
+
+  // Show success then close sheet
+  document.getElementById('create-task-form').style.display = 'none';
+  const s = document.getElementById('create-success');
+  document.getElementById('create-success-msg').textContent = '"' + name + '" added!';
+  s.style.display = 'block';
+
+  // Reset fields for next open
+  document.getElementById('new-task-name').value = '';
+  document.getElementById('new-goal-name').value = '';
+  document.getElementById('new-goal-date').value = '';
+  document.getElementById('toggle-goal-link').className = 'toggle toggle-off';
+  document.getElementById('goal-link-fields').style.display = 'none';
+  document.getElementById('toggle-reminder').className = 'toggle toggle-off';
+  document.getElementById('reminder-fields').style.display = 'none';
+
+  setTimeout(() => {
+    closeAddSheet();
+    setTimeout(() => {
+      s.style.display = 'none';
+      document.getElementById('create-task-form').style.display = 'block';
+    }, 300);
+  }, 1400);
+}
+
+// ── Admin page switching ──
+function switchPage(name, el) {
+  document.querySelectorAll('.admin-page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sidebar-item').forEach(s => s.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  el.classList.add('active');
+}
+
+// ── Redeem button copy (admin-configurable) ──
+const redeemCopy = { idle: 'Redeem', done: 'Redeemed ✓', low: 'Need more pts' };
+
+// ── Reward catalog ──
+let rewardCatalog = [
+  { name: 'Coffee gift card',  cost: 200,  icon: 'coffee'       },
+  { name: 'Flex Friday hour',  cost: 300,  icon: 'clock-hour-4' },
+  { name: '$10 gift card',     cost: 400,  icon: 'shopping-bag' },
+  { name: 'Extra PTO day',     cost: 1000, icon: 'beach'        },
+];
+
+function escHtml(s) {
+  return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function renderUserRewards() {
+  const list = document.getElementById('rewards-list');
+  if (!list) return;
+  if (!rewardCatalog.length) {
+    list.innerHTML = '<p style="font-size:12px;color:var(--text-2);padding:14px 0;text-align:center;">No rewards configured.</p>';
+    return;
+  }
+  list.innerHTML = rewardCatalog.map(r => `
+    <div class="reward-item">
+      ${r.icon ? `<div class="reward-icon"><i class="ti ti-${escHtml(r.icon)}"></i></div>` : ''}
+      <div class="reward-info">
+        <p class="reward-name">${escHtml(r.name) || '<em>Unnamed</em>'}</p>
+        <p class="reward-pts">${Number(r.cost).toLocaleString()} pts</p>
+      </div>
+      <button class="redeem-btn" onclick="redeem(this,${Number(r.cost)})">${escHtml(redeemCopy.idle)}</button>
+    </div>`).join('');
+}
+
+function renderAdminCatalog() {
+  const container = document.getElementById('catalog-list');
+  if (!container) return;
+  if (!rewardCatalog.length) {
+    container.innerHTML = '<p class="catalog-empty">No rewards yet. Add one below.</p>';
+    return;
+  }
+  container.innerHTML = rewardCatalog.map((r, i) => `
+    <div class="catalog-row">
+      <div class="icon-preview" style="width:34px;height:34px;flex-shrink:0;">
+        ${r.icon ? `<i class="ti ti-${escHtml(r.icon)}"></i>` : '<i class="ti ti-photo-off" style="color:var(--text-2);font-size:13px;"></i>'}
+      </div>
+      <input class="text-input catalog-name" placeholder="Reward name" value="${escHtml(r.name)}"
+             oninput="rewardCatalog[${i}].name=this.value; renderUserRewards()" />
+      <input class="pts-input" type="number" min="0" value="${r.cost}" style="width:72px;"
+             oninput="rewardCatalog[${i}].cost=Number(this.value)||0; renderUserRewards()" />
+      <span class="pts-unit" style="width:28px;">pts</span>
+      <input class="text-input catalog-icon icon-name-input" placeholder="icon name" value="${escHtml(r.icon)}"
+             oninput="rewardCatalog[${i}].icon=this.value.trim(); renderAdminCatalog(); renderUserRewards()" />
+      <button class="remove-btn" onclick="removeReward(${i})" title="Remove"><i class="ti ti-trash"></i></button>
+    </div>`).join('');
+}
+
+function addReward() {
+  rewardCatalog.push({ name: '', cost: 0, icon: '' });
+  renderAdminCatalog();
+  renderUserRewards();
+  markDirty();
+  const rows = document.querySelectorAll('#catalog-list .catalog-row');
+  if (rows.length) rows[rows.length - 1].querySelector('.catalog-name').focus();
+}
+
+function removeReward(i) {
+  rewardCatalog.splice(i, 1);
+  renderAdminCatalog();
+  renderUserRewards();
+  markDirty();
+}
+
+// ── Reward label preview ──
+function updateRewardLabel(val) {
+  const label = val.trim() || 'points';
+  document.getElementById('reward-label-preview').textContent = label;
+  document.querySelectorAll('.pts-unit').forEach(el => el.textContent = label.length > 8 ? label.slice(0,8) : label);
+}
+
+// ── Landing page header toggles ──
+function headerToggle(key) {
+  const toggle = document.getElementById('toggle-' + key);
+  const row    = toggle.closest('.header-row');
+  const on     = toggle.classList.contains('toggle-on');
+  toggle.classList.toggle('toggle-on',  !on);
+  toggle.classList.toggle('toggle-off',  on);
+  row.classList.toggle('header-row-disabled', !on);
+  markDirty();
+}
+
+// ── Auth method selection ──
+function selectAuthMethod(method) {
+  document.getElementById('radio-auth-taskit').classList.toggle('active', method === 'taskit');
+  document.getElementById('radio-auth-sso').classList.toggle('active', method === 'sso');
+  document.getElementById('sso-config-card').style.display = method === 'sso' ? '' : 'none';
+  markDirty();
+}
+
+// ── Landing page category selection ──
+function selectCategory(key) {
+  ['none','time','theme'].forEach(k => {
+    document.getElementById('radio-' + k).classList.toggle('active', k === key);
+  });
+  markDirty();
+}
+
+// ── Admin toggle ──
+function adminToggle(toggle, badgeId) {
+  const badge = document.getElementById(badgeId);
+  const on    = toggle.classList.contains('toggle-on');
+  toggle.classList.toggle('toggle-on',  !on);
+  toggle.classList.toggle('toggle-off',  on);
+  badge.className   = on ? 'badge badge-gray' : 'badge badge-blue';
+  badge.textContent = on ? 'Disabled'         : 'Enabled';
+  markDirty();
+}
+
+// ── Notifications ──
+function toggleNotifications() {
+  const toggle = document.getElementById('toggle-notif');
+  const badge  = document.getElementById('b-notif');
+  const on     = toggle.classList.contains('toggle-on');
+  toggle.classList.toggle('toggle-on',  !on);
+  toggle.classList.toggle('toggle-off',  on);
+  badge.className   = on ? 'badge badge-gray' : 'badge badge-blue';
+  badge.textContent = on ? 'Disabled'         : 'Enabled';
+  const section = document.getElementById('notif-config-section');
+  section.style.opacity       = on ? '0.45' : '1';
+  section.style.pointerEvents = on ? 'none'  : '';
+  markDirty();
+}
+
+function notifModeSwitch(mode) {
+  const isTime = mode === 'time';
+  document.getElementById('notif-tab-time').classList.toggle('active', isTime);
+  document.getElementById('notif-tab-before').classList.toggle('active', !isTime);
+  document.getElementById('notif-mode-time').style.display   = isTime ? '' : 'none';
+  document.getElementById('notif-mode-before').style.display = isTime ? 'none' : '';
+  markDirty();
+}
+
+function toggleReminder() {
+  const toggle = document.getElementById('toggle-reminder');
+  const fields = document.getElementById('reminder-fields');
+  const on = toggle.classList.contains('toggle-on');
+  toggle.classList.toggle('toggle-on', !on);
+  toggle.classList.toggle('toggle-off', on);
+  fields.style.display = on ? 'none' : 'block';
+}
+
+function remModeSwitch(mode) {
+  const isTime = mode === 'time';
+  document.getElementById('rem-tab-time').classList.toggle('active', isTime);
+  document.getElementById('rem-tab-before').classList.toggle('active', !isTime);
+  document.getElementById('rem-mode-time').style.display   = isTime ? '' : 'none';
+  document.getElementById('rem-mode-before').style.display = isTime ? 'none' : '';
+}
+
+const NOTIF_SAMPLE = { '{firstName}': 'Emily', '{taskName}': '30-min walk', '{appName}': 'Task It' };
+
+function notifPreviewUpdate() {
+  const resolve = tpl => Object.entries(NOTIF_SAMPLE).reduce((s, [k, v]) => s.replaceAll(k, v), tpl);
+  document.getElementById('notif-preview-title').textContent = resolve(document.getElementById('notif-title-input').value)  || 'Notification title';
+  document.getElementById('notif-preview-body').textContent  = resolve(document.getElementById('notif-body-input').value)   || 'Notification body';
+}
+
+// ── Simulated save ──
+let adminDirty = false;
+
+function markDirty() {
+  if (!adminDirty) {
+    adminDirty = true;
+    document.getElementById('admin-save-bar').classList.add('visible');
+  }
+}
+
+function saveChanges() {
+  const btn = document.getElementById('admin-save-btn');
+  btn.classList.add('saving');
+  btn.disabled = true;
+  setTimeout(() => {
+    btn.classList.remove('saving');
+    btn.disabled = false;
+    adminDirty = false;
+    document.getElementById('admin-save-bar').classList.remove('visible');
+    showToast('Changes saved to API');
+  }, 900);
+}
+
+function showToast(msg) {
+  const toast = document.getElementById('admin-toast');
+  document.getElementById('admin-toast-msg').textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+// ── Init ──
+renderUserRewards();
+renderAdminCatalog();
+notifPreviewUpdate();
+
+document.getElementById('view-admin').addEventListener('input', markDirty);
+document.getElementById('view-admin').addEventListener('change', markDirty);
+</script>
+
+<div class="toast" id="admin-toast">
+  <i class="ti ti-circle-check" style="font-size:16px;color:var(--amber);"></i>
+  <span id="admin-toast-msg">Changes saved</span>
+</div>
+
+</body>
+</html>
