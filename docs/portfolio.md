@@ -1,5 +1,7 @@
 # Portfolio
 
+*I selected a few examples from League's Canadian and US help centres, but I wrote and managed all the content on these websites.*
+
 ## League: New Hire Onboarding Overview
 **Type:** Conceptual overview / process diagram
 **Audience:** New employees enrolling in benefits for the first time
