@@ -27,3 +27,13 @@ Documented a multi-path workflow covering a high-stakes, time-sensitive process.
 Documented a straightforward but practically important task: accessing digital ID cards in time-sensitive situations like a dental appointment. Structured parallel instructions for mobile and web, and provided just enough context on unfamiliar terms (Group ID, Member ID) without over-explaining.
 
 [View article →](https://ushelp.league.com/en/faqs/Working-version/US/view-download-and-use-the-digital-benefits-cards)
+
+---
+
+## Notch Financial: 11 New Cookbooks to Inspire You This Summer
+**Type:** Blog post
+**Audience:** General consumers
+
+Wrote a curated, seasonal roundup of cookbooks for a restaurant supply management company's blog. Clear, engaging writing isn't limited to technical documentation!
+
+[View post →](https://www.notch.financial/blog/11-new-cookbooks-to-inspire-you-this-summer)
