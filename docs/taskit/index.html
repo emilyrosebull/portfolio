@@ -454,9 +454,6 @@ body {
 .header-row { display: flex; align-items: flex-start; justify-content: space-between; padding: 14px 0; border-bottom: 0.5px solid var(--border); gap: 20px; }
 .header-row-left { display: flex; align-items: flex-start; gap: 12px; flex: 1; min-width: 0; }
 .header-row input.text-input { flex-shrink: 0; }
-.header-row .toggle { margin-top: 2px; flex-shrink: 0; }
-.header-row-disabled input { opacity: 0.4; pointer-events: none; }
-.header-row-disabled .field-label, .header-row-disabled .field-desc { opacity: 0.4; }
 
 .radio-option-group { display: flex; flex-direction: column; }
 .radio-option { display: flex; align-items: flex-start; gap: 12px; padding: 13px 0; border-bottom: 0.5px solid var(--border); cursor: pointer; }
@@ -550,10 +547,6 @@ body {
 .save-btn.saving .save-btn-spinner { display: inline-block; animation: ti-spin 0.7s linear infinite; }
 .save-btn.saving .save-btn-label { display: none; }
 
-/* ── Reminder segmented control (bottom sheet) ── */
-.rem-seg { display:flex; background:var(--bg-2); border-radius:6px; padding:2px; }
-.rem-tab { flex:1; padding:5px 4px; border-radius:4px; font-size:11px; font-weight:500; background:none; border:none; color:var(--text-2); cursor:pointer; font-family:inherit; text-align:center; }
-.rem-tab.active { background:#fff; border:0.5px solid var(--border); color:var(--text); box-shadow:0 1px 2px rgba(0,0,0,0.08); }
 
 /* ── Toast ── */
 .toast {
@@ -632,7 +625,7 @@ body {
 
           <!-- TODAY TAB -->
           <div class="phone-tab active" id="tab-today">
-            <p class="phone-greeting">Good morning, Emily</p>
+            <p class="phone-greeting" id="phone-greeting">Good morning, Emily</p>
             <p class="phone-subtext" id="today-sub">4 of 7 goals done · 14-day streak</p>
             <div class="phone-stats">
               <div class="phone-stat">
@@ -813,29 +806,7 @@ body {
                   <input class="phone-input" id="new-goal-date" type="date" />
                 </div>
               </div>
-              <div class="phone-form-group">
-                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
-                  <label class="phone-form-label" style="margin-bottom:0;">Remind me</label>
-                  <div class="toggle toggle-off" id="toggle-reminder" onclick="toggleReminder()"></div>
-                </div>
-                <div id="reminder-fields" style="display:none;">
-                  <div class="rem-seg" style="margin-bottom:8px;">
-                    <button id="rem-tab-time" class="rem-tab active" onclick="remModeSwitch('time')">At a time</button>
-                    <button id="rem-tab-before" class="rem-tab" onclick="remModeSwitch('before')">Before due date</button>
-                  </div>
-                  <div id="rem-mode-time">
-                    <input class="phone-input" type="time" id="rem-time" value="17:00" />
-                  </div>
-                  <div id="rem-mode-before" style="display:none;">
-                    <select class="phone-select" id="rem-offset">
-                      <option value="30">30 minutes before</option>
-                      <option value="60" selected>1 hour before</option>
-                      <option value="120">2 hours before</option>
-                      <option value="1440">1 day before</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
+
               <button id="sheet-cta" class="phone-btn-primary" onclick="createTask()">Add task</button>
             </div>
             <div class="create-success" id="create-success" style="display:none;">
@@ -1033,13 +1004,11 @@ body {
         <nav class="admin-sidebar">
           <p class="sidebar-section">Configuration</p>
           <div class="sidebar-item active" onclick="switchPage('overview',this)"><i class="ti ti-layout-grid"></i> Overview</div>
-          <div class="sidebar-item" onclick="switchPage('organization',this)"><i class="ti ti-building"></i> Organization</div>
           <div class="sidebar-item" onclick="switchPage('auth',this)"><i class="ti ti-lock"></i> Auth &amp; SSO</div>
-          <div class="sidebar-item" onclick="switchPage('branding',this)"><i class="ti ti-palette"></i> Branding</div>
-          <div class="sidebar-item" onclick="switchPage('integrations',this)"><i class="ti ti-plug"></i> Integrations</div>
-          <div class="sidebar-item" onclick="switchPage('rewards',this)"><i class="ti ti-star"></i> Rewards</div>
           <div class="sidebar-item" onclick="switchPage('landingpage',this)"><i class="ti ti-layout-navbar"></i> Landing page</div>
           <div class="sidebar-item" onclick="switchPage('taskcreation',this)"><i class="ti ti-forms"></i> Task creation</div>
+          <div class="sidebar-item" onclick="switchPage('rewards',this)"><i class="ti ti-star"></i> Rewards</div>
+          <div class="sidebar-item" onclick="switchPage('integrations',this)"><i class="ti ti-plug"></i> Integrations</div>
           <div class="sidebar-item" onclick="switchPage('notifications',this)"><i class="ti ti-bell"></i> Notifications</div>
         </nav>
 
@@ -1115,53 +1084,6 @@ body {
             </div>
           </div>
 
-          <!-- ORGANIZATION -->
-          <div class="admin-page" id="page-organization">
-            <p class="page-title">Organization</p>
-            <p class="page-desc">Manage your company profile and department structure.</p>
-            <div class="card">
-              <p class="card-title">Company info</p>
-              <div class="field-row">
-                <div><p class="field-label">Company name</p><p class="field-desc">Shown across the admin console and employee app.</p></div>
-                <input class="text-input" value="Acme Corp" />
-              </div>
-              <div class="field-row">
-                <div><p class="field-label">Industry</p><p class="field-desc">Helps tailor default goal recommendations.</p></div>
-                <select class="select-input"><option selected>Technology</option><option>Healthcare</option><option>Finance</option><option>Retail</option><option>Education</option></select>
-              </div>
-              <div class="field-row">
-                <div><p class="field-label">Company size</p><p class="field-desc">Total headcount bracket.</p></div>
-                <select class="select-input"><option>1–50</option><option>51–200</option><option selected>201–500</option><option>501–2,000</option><option>2,001+</option></select>
-              </div>
-              <div class="field-row">
-                <div><p class="field-label">Default locale</p><p class="field-desc">Language used for new employee accounts.</p></div>
-                <select class="select-input"><option selected>en-US</option><option>en-GB</option><option>fr-FR</option><option>de-DE</option><option>es-ES</option></select>
-              </div>
-            </div>
-            <div class="card">
-              <p class="card-title">Departments</p>
-              <div class="field-row">
-                <div><p class="field-label">Engineering</p><p class="field-desc">62 active employees</p></div>
-                <span class="badge badge-blue">Active</span>
-              </div>
-              <div class="field-row">
-                <div><p class="field-label">Product</p><p class="field-desc">28 active employees</p></div>
-                <span class="badge badge-blue">Active</span>
-              </div>
-              <div class="field-row">
-                <div><p class="field-label">Design</p><p class="field-desc">19 active employees</p></div>
-                <span class="badge badge-blue">Active</span>
-              </div>
-              <div class="field-row">
-                <div><p class="field-label">Sales</p><p class="field-desc">74 active employees</p></div>
-                <span class="badge badge-blue">Active</span>
-              </div>
-              <div class="field-row">
-                <div><p class="field-label">HR</p><p class="field-desc">15 active employees</p></div>
-                <span class="badge badge-blue">Active</span>
-              </div>
-            </div>
-          </div>
 
           <!-- AUTH -->
           <div class="admin-page" id="page-auth">
@@ -1211,244 +1133,6 @@ body {
           </div>
 
 
-          <!-- BRANDING -->
-          <div class="admin-page" id="page-branding">
-            <p class="page-title">Branding</p>
-            <p class="page-desc">Customize how Task It looks for your employees.</p>
-            <div class="card">
-              <p class="card-title">Logo</p>
-              <div class="field-row">
-                <div>
-                  <p class="field-label">App logo</p>
-                  <p class="field-desc">Shown in the mobile app top bar. PNG or SVG, min 64×64 px.</p>
-                </div>
-                <div style="display:flex;align-items:center;gap:12px;">
-                  <div style="width:48px;height:48px;border-radius:8px;background:var(--bg-2);border:0.5px solid var(--border);display:flex;align-items:center;justify-content:center;">
-                    <i class="ti ti-check" style="font-size:22px;color:var(--primary);"></i>
-                  </div>
-                  <button style="font-size:12px;padding:6px 14px;border-radius:var(--r-md);border:0.5px solid var(--border);background:var(--bg-2);color:var(--text);cursor:pointer;">Upload logo</button>
-                </div>
-              </div>
-            </div>
-            <div class="card">
-              <p class="card-title">Brand colors</p>
-              <div class="field-row">
-                <div><p class="field-label">Primary color</p><p class="field-desc">Used for buttons, active states, and key UI elements.</p></div>
-                <div class="color-swatch">
-                  <div class="swatch" style="background:#0C447C;"></div>
-                  <span class="swatch-code">#0C447C</span>
-                </div>
-              </div>
-              <div class="field-row">
-                <div><p class="field-label">Accent color</p><p class="field-desc">Used for points badges, the accent bar, and highlights.</p></div>
-                <div class="color-swatch">
-                  <div class="swatch" style="background:#EF9F27;"></div>
-                  <span class="swatch-code">#EF9F27</span>
-                </div>
-              </div>
-              <div class="field-row">
-                <div><p class="field-label">App name override</p><p class="field-desc">Replace "Task It" with a custom name in the employee app.</p></div>
-                <input class="text-input" placeholder="e.g. Acme Wellness" />
-              </div>
-            </div>
-          </div>
-
-          <!-- INTEGRATIONS -->
-          <div class="admin-page" id="page-integrations">
-            <p class="page-title">Integrations</p>
-            <p class="page-desc">Choose which integrations are available to your employees.</p>
-
-            <div class="card">
-              <p class="card-title">Page header</p>
-              <div class="field-row">
-                <div><p class="field-label">Heading</p><p class="field-desc">Title shown at the top of the Connected Apps screen in the employee app.</p></div>
-                <input class="text-input" value="Connected apps" style="min-width:220px;" oninput="document.getElementById('apps-heading').textContent=this.value||'Connected apps'" />
-              </div>
-              <div class="field-row" style="border-bottom:none;">
-                <div><p class="field-label">Description</p><p class="field-desc">Subtitle shown below the heading.</p></div>
-                <input class="text-input" value="Sync your calendars and tools." style="min-width:220px;" oninput="document.getElementById('apps-desc').textContent=this.value||'Sync your calendars and tools.'" />
-              </div>
-            </div>
-
-            <div class="card">
-              <div class="field-row" style="align-items:center;">
-                <div style="display:flex;align-items:center;gap:14px;flex:1;">
-                  <div id="admin-icon-jira" style="width:40px;height:40px;border-radius:8px;background:var(--blue-light);color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;"><i class="ti ti-brand-trello"></i></div>
-                  <div><p class="field-label">Jira</p><p class="field-desc">Employees can sync Jira issues as work tasks in Task It. Requires a Jira Cloud organization.</p></div>
-                </div>
-                <div class="field-right">
-                  <span class="badge badge-blue" id="b-jira">Enabled</span>
-                  <div class="toggle toggle-on" onclick="adminToggle(this,'b-jira')"></div>
-                </div>
-              </div>
-              <div class="field-row" style="align-items:center;">
-                <div style="display:flex;align-items:center;gap:14px;flex:1;">
-                  <div id="admin-icon-gcal" style="width:40px;height:40px;border-radius:8px;background:var(--amber-bg);color:#633806;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;"><i class="ti ti-calendar"></i></div>
-                  <div><p class="field-label">Google Calendar</p><p class="field-desc">Employees can pull Google Calendar events into their Task It daily view.</p></div>
-                </div>
-                <div class="field-right">
-                  <span class="badge badge-blue" id="b-gcal">Enabled</span>
-                  <div class="toggle toggle-on" onclick="adminToggle(this,'b-gcal')"></div>
-                </div>
-              </div>
-              <div class="field-row" style="align-items:center;">
-                <div style="display:flex;align-items:center;gap:14px;flex:1;">
-                  <div id="admin-icon-apple" style="width:40px;height:40px;border-radius:8px;background:#F3F4F6;color:#374151;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;"><i class="ti ti-heartbeat"></i></div>
-                  <div><p class="field-label">Apple Health</p><p class="field-desc">Allow employees to sync Apple Health data to automatically complete health goals.</p></div>
-                </div>
-                <div class="field-right">
-                  <span class="badge badge-gray" id="b-apple">Disabled</span>
-                  <div class="toggle toggle-off" onclick="adminToggle(this,'b-apple')"></div>
-                </div>
-              </div>
-              <div class="field-row" style="align-items:center;">
-                <div style="display:flex;align-items:center;gap:14px;flex:1;">
-                  <div id="admin-icon-ghealth" style="width:40px;height:40px;border-radius:8px;background:#E8F5E9;color:#2E7D32;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;"><i class="ti ti-heart-rate-monitor"></i></div>
-                  <div><p class="field-label">Google Health</p><p class="field-desc">Allow employees to sync Google Health fitness data to automatically complete health goals.</p></div>
-                </div>
-                <div class="field-right">
-                  <span class="badge badge-gray" id="b-ghealth">Disabled</span>
-                  <div class="toggle toggle-off" onclick="adminToggle(this,'b-ghealth')"></div>
-                </div>
-              </div>
-              <div class="field-row" style="align-items:center;">
-                <div style="display:flex;align-items:center;gap:14px;flex:1;">
-                  <div id="admin-icon-garmin" style="width:40px;height:40px;border-radius:8px;background:#FFF3E0;color:#E65100;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;"><i class="ti ti-run"></i></div>
-                  <div><p class="field-label">Garmin</p><p class="field-desc">Allow employees to sync Garmin activity and step data to complete health goals.</p></div>
-                </div>
-                <div class="field-right">
-                  <span class="badge badge-gray" id="b-garmin">Disabled</span>
-                  <div class="toggle toggle-off" onclick="adminToggle(this,'b-garmin')"></div>
-                </div>
-              </div>
-              <div class="field-row" style="align-items:center;">
-                <div style="display:flex;align-items:center;gap:14px;flex:1;">
-                  <div id="admin-icon-fitbit" style="width:40px;height:40px;border-radius:8px;background:#FCE4EC;color:#C62828;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;"><i class="ti ti-activity"></i></div>
-                  <div><p class="field-label">Fitbit</p><p class="field-desc">Allow employees to sync Fitbit activity and sleep data to complete health goals.</p></div>
-                </div>
-                <div class="field-right">
-                  <span class="badge badge-gray" id="b-fitbit">Disabled</span>
-                  <div class="toggle toggle-off" onclick="adminToggle(this,'b-fitbit')"></div>
-                </div>
-              </div>
-            </div>
-            <div class="info-banner">
-              <i class="ti ti-info-circle"></i>
-              Disabling an integration removes it from the employee-facing app. Employees who have already connected an account will be disconnected automatically.
-            </div>
-          </div>
-
-          <!-- REWARDS -->
-          <div class="admin-page" id="page-rewards">
-            <p class="page-title">Rewards</p>
-            <p class="page-desc">Configure how rewards are labeled and how many points each task or goal is worth.</p>
-
-            <div class="card">
-              <p class="card-title">Reward type</p>
-              <div class="field-row">
-                <div>
-                  <p class="field-label">Reward label</p>
-                  <p class="field-desc">The unit shown throughout the app. Leave as "points" or enter a custom name (e.g. "coins", "gems", "credits").</p>
-                </div>
-                <input class="text-input" id="reward-label-input" value="points" style="min-width:180px;" oninput="updateRewardLabel(this.value)" />
-              </div>
-              <div class="field-row">
-                <div>
-                  <p class="field-label">Reward label preview</p>
-                  <p class="field-desc">How the label appears in the employee app header and rewards screen.</p>
-                </div>
-                <div style="display:flex;gap:8px;align-items:center;">
-                  <span style="font-size:13px;background:var(--bg-2);border:0.5px solid var(--border);border-radius:var(--r-md);padding:5px 12px;color:var(--text);">340 <span id="reward-label-preview">points</span> available</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="card">
-              <p class="card-title">Rewards section heading</p>
-              <div class="field-row">
-                <div>
-                  <p class="field-label">Section heading</p>
-                  <p class="field-desc">Shown above the rewards list in the employee app.</p>
-                </div>
-                <input class="text-input" value="Redeem rewards" style="min-width:220px;" oninput="document.getElementById('rewards-section-heading').textContent = this.value || 'Redeem rewards'" />
-              </div>
-            </div>
-
-            <div class="card">
-              <p class="card-title">Reward catalog</p>
-              <p style="font-size:12px;color:var(--text-2);margin-bottom:14px;">Build the list of rewards employees can redeem. Use any <a href="https://tabler.io/icons" target="_blank" style="color:var(--primary);">Tabler icon</a> name, or leave blank for no icon.</p>
-              <div class="catalog-header">
-                <span style="width:34px;flex-shrink:0;"></span>
-                <span class="catalog-col-label" style="flex:1;">Name</span>
-                <span class="catalog-col-label" style="width:72px;">Cost</span>
-                <span style="width:28px;"></span>
-                <span class="catalog-col-label" style="width:130px;">Icon</span>
-                <span style="width:32px;"></span>
-              </div>
-              <div id="catalog-list"></div>
-              <button class="add-reward-btn" onclick="addReward()"><i class="ti ti-plus"></i> Add reward</button>
-            </div>
-
-            <div class="card">
-              <p class="card-title">Button copy</p>
-              <p style="font-size:12px;color:var(--text-2);margin-bottom:12px;">Customize the text shown on the redeem button in each of its three states.</p>
-              <div class="field-row" style="align-items:center;">
-                <div>
-                  <p class="field-label">Default</p>
-                  <p class="field-desc">Shown when the employee has enough points to redeem.</p>
-                </div>
-                <input class="text-input" id="btn-idle-input" value="Redeem" style="min-width:180px;" oninput="redeemCopy.idle=this.value||'Redeem'" />
-              </div>
-              <div class="field-row" style="align-items:center;">
-                <div>
-                  <p class="field-label">Redeemed</p>
-                  <p class="field-desc">Shown briefly after a successful redemption.</p>
-                </div>
-                <input class="text-input" id="btn-done-input" value="Redeemed ✓" style="min-width:180px;" oninput="redeemCopy.done=this.value||'Redeemed ✓'" />
-              </div>
-              <div class="field-row" style="align-items:center;">
-                <div>
-                  <p class="field-label">Insufficient balance</p>
-                  <p class="field-desc">Shown briefly when the employee doesn't have enough points.</p>
-                </div>
-                <input class="text-input" id="btn-low-input" value="Need more pts" style="min-width:180px;" oninput="redeemCopy.low=this.value||'Need more pts'" />
-              </div>
-            </div>
-
-            <div class="card">
-              <p class="card-title">Points by category</p>
-              <p style="font-size:12px;color:var(--text-2);margin-bottom:14px;">Set how many points are awarded when an employee completes a task or goal in each category. Enter 0 to award no points.</p>
-              <div class="pts-cat-header">
-                <span style="flex:1;"></span>
-                <span class="catalog-col-label" style="width:100px;text-align:right;">Per task</span>
-                <span class="catalog-col-label" style="width:100px;text-align:right;">Per goal</span>
-              </div>
-              <div class="field-row pts-cat-row" style="align-items:center;">
-                <div style="display:flex;align-items:center;gap:10px;flex:1;">
-                  <div class="cat-icon cat-icon-work"><i class="ti ti-briefcase"></i></div>
-                  <div><p class="field-label">Work</p></div>
-                </div>
-                <div class="pts-cat-cell"><input class="pts-input" type="number" min="0" value="15" /><span class="pts-unit">pts</span></div>
-                <div class="pts-cat-cell"><input class="pts-input" type="number" min="0" value="30" /><span class="pts-unit">pts</span></div>
-              </div>
-              <div class="field-row pts-cat-row" style="align-items:center;">
-                <div style="display:flex;align-items:center;gap:10px;flex:1;">
-                  <div class="cat-icon cat-icon-personal"><i class="ti ti-heart"></i></div>
-                  <div><p class="field-label">Personal</p></div>
-                </div>
-                <div class="pts-cat-cell"><input class="pts-input" type="number" min="0" value="10" /><span class="pts-unit">pts</span></div>
-                <div class="pts-cat-cell"><input class="pts-input" type="number" min="0" value="25" /><span class="pts-unit">pts</span></div>
-              </div>
-              <div class="field-row pts-cat-row" style="align-items:center;">
-                <div style="display:flex;align-items:center;gap:10px;flex:1;">
-                  <div class="cat-icon cat-icon-health"><i class="ti ti-activity-heartbeat"></i></div>
-                  <div><p class="field-label">Health</p></div>
-                </div>
-                <div class="pts-cat-cell"><input class="pts-input" type="number" min="0" value="20" /><span class="pts-unit">pts</span></div>
-                <div class="pts-cat-cell"><input class="pts-input" type="number" min="0" value="20" /><span class="pts-unit">pts</span></div>
-              </div>
-            </div>
-          </div>
 
           <!-- LANDING PAGE -->
           <div class="admin-page" id="page-landingpage">
@@ -1466,34 +1150,25 @@ body {
               </div>
 
               <div class="header-row">
-                <div class="header-row-left">
-                  <div class="toggle toggle-on" id="toggle-greeting" onclick="headerToggle('greeting')"></div>
-                  <div>
-                    <p class="field-label">Greeting</p>
-                    <p class="field-desc">First line shown in large text on the home screen.</p>
-                  </div>
+                <div>
+                  <p class="field-label">Greeting</p>
+                  <p class="field-desc">First line shown in large text on the home screen. Leave blank to hide.</p>
                 </div>
-                <input class="text-input" id="input-greeting" value="Good morning, {Name}" style="min-width:260px;" />
+                <input class="text-input" id="input-greeting" value="Good morning, {Name}" style="min-width:260px;" oninput="syncHeaderPreview()" />
               </div>
               <div class="header-row">
-                <div class="header-row-left">
-                  <div class="toggle toggle-on" id="toggle-progress" onclick="headerToggle('progress')"></div>
-                  <div>
-                    <p class="field-label">Progress</p>
-                    <p class="field-desc">Shows task completion progress for the day.</p>
-                  </div>
+                <div>
+                  <p class="field-label">Progress</p>
+                  <p class="field-desc">Shows task completion progress for the day. Leave blank to hide.</p>
                 </div>
-                <input class="text-input" id="input-progress" value="{#} of {total} tasks done" style="min-width:260px;" />
+                <input class="text-input" id="input-progress" value="{#} of {total} tasks done" style="min-width:260px;" oninput="syncHeaderPreview()" />
               </div>
               <div class="header-row" style="border-bottom:none;">
-                <div class="header-row-left">
-                  <div class="toggle toggle-on" id="toggle-streak" onclick="headerToggle('streak')"></div>
-                  <div>
-                    <p class="field-label">Streak</p>
-                    <p class="field-desc">Shows the employee's current consecutive-day streak.</p>
-                  </div>
+                <div>
+                  <p class="field-label">Streak</p>
+                  <p class="field-desc">Shows the employee's current consecutive-day streak. Leave blank to hide.</p>
                 </div>
-                <input class="text-input" id="input-streak" value="{streak}-day streak" style="min-width:260px;" />
+                <input class="text-input" id="input-streak" value="{streak}-day streak" style="min-width:260px;" oninput="syncHeaderPreview()" />
               </div>
             </div>
 
@@ -1626,6 +1301,195 @@ body {
                   <span style="font-size:12px;color:var(--text-2);">tasks</span>
                 </div>
               </div>
+            </div>
+          </div>
+
+          <!-- REWARDS -->
+          <div class="admin-page" id="page-rewards">
+            <p class="page-title">Rewards</p>
+            <p class="page-desc">Configure how rewards are labeled and how many points each task or goal is worth.</p>
+
+            <div class="card">
+              <p class="card-title">Reward type</p>
+              <div class="field-row">
+                <div>
+                  <p class="field-label">Reward label</p>
+                  <p class="field-desc">The unit shown throughout the app. Leave as "points" or enter a custom name (e.g. "coins", "gems", "credits").</p>
+                </div>
+                <input class="text-input" id="reward-label-input" value="points" style="min-width:180px;" oninput="updateRewardLabel(this.value)" />
+              </div>
+
+            </div>
+
+            <div class="card">
+              <p class="card-title">Rewards section heading</p>
+              <div class="field-row">
+                <div>
+                  <p class="field-label">Section heading</p>
+                  <p class="field-desc">Shown above the rewards list in the employee app.</p>
+                </div>
+                <input class="text-input" value="Redeem rewards" style="min-width:220px;" oninput="document.getElementById('rewards-section-heading').textContent = this.value || 'Redeem rewards'" />
+              </div>
+            </div>
+
+            <div class="card">
+              <p class="card-title">Incentives</p>
+              <p style="font-size:12px;color:var(--text-2);margin-bottom:14px;">Build the list of rewards employees can redeem. Use any <a href="https://tabler.io/icons" target="_blank" style="color:var(--primary);">Tabler icon</a> name, or leave blank for no icon.</p>
+              <div class="catalog-header">
+                <span style="width:34px;flex-shrink:0;"></span>
+                <span class="catalog-col-label" style="flex:1;">Name</span>
+                <span class="catalog-col-label" style="width:72px;">Cost</span>
+                <span style="width:28px;"></span>
+                <span class="catalog-col-label" style="width:130px;">Icon</span>
+                <span style="width:32px;"></span>
+              </div>
+              <div id="catalog-list"></div>
+              <button class="add-reward-btn" onclick="addReward()"><i class="ti ti-plus"></i> Add reward</button>
+            </div>
+
+            <div class="card">
+              <p class="card-title">Button copy</p>
+              <p style="font-size:12px;color:var(--text-2);margin-bottom:12px;">Customize the text shown on the redeem button in each of its three states.</p>
+              <div class="field-row" style="align-items:center;">
+                <div>
+                  <p class="field-label">Default</p>
+                  <p class="field-desc">Shown when the employee has enough points to redeem.</p>
+                </div>
+                <input class="text-input" id="btn-idle-input" value="Redeem" style="min-width:180px;" oninput="redeemCopy.idle=this.value||'Redeem'" />
+              </div>
+              <div class="field-row" style="align-items:center;">
+                <div>
+                  <p class="field-label">Redeemed</p>
+                  <p class="field-desc">Shown briefly after a successful redemption.</p>
+                </div>
+                <input class="text-input" id="btn-done-input" value="Redeemed ✓" style="min-width:180px;" oninput="redeemCopy.done=this.value||'Redeemed ✓'" />
+              </div>
+              <div class="field-row" style="align-items:center;">
+                <div>
+                  <p class="field-label">Insufficient balance</p>
+                  <p class="field-desc">Shown briefly when the employee doesn't have enough points.</p>
+                </div>
+                <input class="text-input" id="btn-low-input" value="Need more pts" style="min-width:180px;" oninput="redeemCopy.low=this.value||'Need more pts'" />
+              </div>
+            </div>
+
+            <div class="card">
+              <p class="card-title">Points by category</p>
+              <p style="font-size:12px;color:var(--text-2);margin-bottom:14px;">Set how many points are awarded when an employee completes a task or goal in each category.</p>
+              <div class="pts-cat-header">
+                <span style="flex:1;"></span>
+                <span class="catalog-col-label" style="width:100px;text-align:right;">Per task</span>
+                <span class="catalog-col-label" style="width:100px;text-align:right;">Per goal</span>
+              </div>
+              <div class="field-row pts-cat-row" style="align-items:center;">
+                <div style="display:flex;align-items:center;gap:10px;flex:1;">
+                  <div class="cat-icon cat-icon-work"><i class="ti ti-briefcase"></i></div>
+                  <div><p class="field-label">Work</p></div>
+                </div>
+                <div class="pts-cat-cell"><input class="pts-input" type="number" min="0" value="15" /><span class="pts-unit">pts</span></div>
+                <div class="pts-cat-cell"><input class="pts-input" type="number" min="0" value="30" /><span class="pts-unit">pts</span></div>
+              </div>
+              <div class="field-row pts-cat-row" style="align-items:center;">
+                <div style="display:flex;align-items:center;gap:10px;flex:1;">
+                  <div class="cat-icon cat-icon-personal"><i class="ti ti-heart"></i></div>
+                  <div><p class="field-label">Personal</p></div>
+                </div>
+                <div class="pts-cat-cell"><input class="pts-input" type="number" min="0" value="10" /><span class="pts-unit">pts</span></div>
+                <div class="pts-cat-cell"><input class="pts-input" type="number" min="0" value="25" /><span class="pts-unit">pts</span></div>
+              </div>
+              <div class="field-row pts-cat-row" style="align-items:center;">
+                <div style="display:flex;align-items:center;gap:10px;flex:1;">
+                  <div class="cat-icon cat-icon-health"><i class="ti ti-activity-heartbeat"></i></div>
+                  <div><p class="field-label">Health</p></div>
+                </div>
+                <div class="pts-cat-cell"><input class="pts-input" type="number" min="0" value="20" /><span class="pts-unit">pts</span></div>
+                <div class="pts-cat-cell"><input class="pts-input" type="number" min="0" value="20" /><span class="pts-unit">pts</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- INTEGRATIONS -->
+          <div class="admin-page" id="page-integrations">
+            <p class="page-title">Integrations</p>
+            <p class="page-desc">Choose which integrations are available to your employees.</p>
+
+            <div class="card">
+              <p class="card-title">Page header</p>
+              <div class="field-row">
+                <div><p class="field-label">Heading</p><p class="field-desc">Title shown at the top of the Connected Apps screen in the employee app.</p></div>
+                <input class="text-input" value="Connected apps" style="min-width:220px;" oninput="document.getElementById('apps-heading').textContent=this.value||'Connected apps'" />
+              </div>
+              <div class="field-row" style="border-bottom:none;">
+                <div><p class="field-label">Description</p><p class="field-desc">Subtitle shown below the heading.</p></div>
+                <input class="text-input" value="Sync your calendars and tools." style="min-width:220px;" oninput="document.getElementById('apps-desc').textContent=this.value||'Sync your calendars and tools.'" />
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="field-row" style="align-items:center;">
+                <div style="display:flex;align-items:center;gap:14px;flex:1;">
+                  <div id="admin-icon-jira" style="width:40px;height:40px;border-radius:8px;background:var(--blue-light);color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;"><i class="ti ti-brand-trello"></i></div>
+                  <div><p class="field-label">Jira</p><p class="field-desc">Employees can sync Jira issues as work tasks in Task It. Requires a Jira Cloud organization.</p></div>
+                </div>
+                <div class="field-right">
+                  <span class="badge badge-blue" id="b-jira">On</span>
+                  <div class="toggle toggle-on" onclick="adminToggle(this,'b-jira')"></div>
+                </div>
+              </div>
+              <div class="field-row" style="align-items:center;">
+                <div style="display:flex;align-items:center;gap:14px;flex:1;">
+                  <div id="admin-icon-gcal" style="width:40px;height:40px;border-radius:8px;background:var(--amber-bg);color:#633806;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;"><i class="ti ti-calendar"></i></div>
+                  <div><p class="field-label">Google Calendar</p><p class="field-desc">Employees can pull Google Calendar events into their Task It daily view.</p></div>
+                </div>
+                <div class="field-right">
+                  <span class="badge badge-blue" id="b-gcal">On</span>
+                  <div class="toggle toggle-on" onclick="adminToggle(this,'b-gcal')"></div>
+                </div>
+              </div>
+              <div class="field-row" style="align-items:center;">
+                <div style="display:flex;align-items:center;gap:14px;flex:1;">
+                  <div id="admin-icon-apple" style="width:40px;height:40px;border-radius:8px;background:#F3F4F6;color:#374151;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;"><i class="ti ti-heartbeat"></i></div>
+                  <div><p class="field-label">Apple Health</p><p class="field-desc">Allow employees to sync Apple Health data to automatically complete health goals.</p></div>
+                </div>
+                <div class="field-right">
+                  <span class="badge badge-gray" id="b-apple">Off</span>
+                  <div class="toggle toggle-off" onclick="adminToggle(this,'b-apple')"></div>
+                </div>
+              </div>
+              <div class="field-row" style="align-items:center;">
+                <div style="display:flex;align-items:center;gap:14px;flex:1;">
+                  <div id="admin-icon-ghealth" style="width:40px;height:40px;border-radius:8px;background:#E8F5E9;color:#2E7D32;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;"><i class="ti ti-heart-rate-monitor"></i></div>
+                  <div><p class="field-label">Google Health</p><p class="field-desc">Allow employees to sync Google Health fitness data to automatically complete health goals.</p></div>
+                </div>
+                <div class="field-right">
+                  <span class="badge badge-gray" id="b-ghealth">Off</span>
+                  <div class="toggle toggle-off" onclick="adminToggle(this,'b-ghealth')"></div>
+                </div>
+              </div>
+              <div class="field-row" style="align-items:center;">
+                <div style="display:flex;align-items:center;gap:14px;flex:1;">
+                  <div id="admin-icon-garmin" style="width:40px;height:40px;border-radius:8px;background:#FFF3E0;color:#E65100;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;"><i class="ti ti-run"></i></div>
+                  <div><p class="field-label">Garmin</p><p class="field-desc">Allow employees to sync Garmin activity and step data to complete health goals.</p></div>
+                </div>
+                <div class="field-right">
+                  <span class="badge badge-gray" id="b-garmin">Off</span>
+                  <div class="toggle toggle-off" onclick="adminToggle(this,'b-garmin')"></div>
+                </div>
+              </div>
+              <div class="field-row" style="align-items:center;">
+                <div style="display:flex;align-items:center;gap:14px;flex:1;">
+                  <div id="admin-icon-fitbit" style="width:40px;height:40px;border-radius:8px;background:#FCE4EC;color:#C62828;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;"><i class="ti ti-activity"></i></div>
+                  <div><p class="field-label">Fitbit</p><p class="field-desc">Allow employees to sync Fitbit activity and sleep data to complete health goals.</p></div>
+                </div>
+                <div class="field-right">
+                  <span class="badge badge-gray" id="b-fitbit">Off</span>
+                  <div class="toggle toggle-off" onclick="adminToggle(this,'b-fitbit')"></div>
+                </div>
+              </div>
+            </div>
+            <div class="info-banner">
+              <i class="ti ti-info-circle"></i>
+              Disabling an integration removes it from the employee-facing app. Employees who have already connected an account will be disconnected automatically.
             </div>
           </div>
 
@@ -1795,7 +1659,7 @@ function syncPoints() {
   document.getElementById('pts-display').textContent = points + ' pts';
   document.getElementById('pts-stat').textContent    = points;
   document.getElementById('rewards-pts').textContent = points;
-  document.getElementById('today-sub').textContent   = doneTasks + ' of ' + TOTAL + ' goals done · 14-day streak';
+  syncHeaderPreview();
 }
 
 // ── Task store ──
@@ -1951,8 +1815,6 @@ function createTask() {
   document.getElementById('new-goal-date').value = '';
   document.getElementById('toggle-goal-link').className = 'toggle toggle-off';
   document.getElementById('goal-link-fields').style.display = 'none';
-  document.getElementById('toggle-reminder').className = 'toggle toggle-off';
-  document.getElementById('reminder-fields').style.display = 'none';
 
   setTimeout(() => {
     closeAddSheet();
@@ -2050,15 +1912,22 @@ function updateRewardLabel(val) {
   document.querySelectorAll('.pts-unit').forEach(el => el.textContent = label.length > 8 ? label.slice(0,8) : label);
 }
 
-// ── Landing page header toggles ──
-function headerToggle(key) {
-  const toggle = document.getElementById('toggle-' + key);
-  const row    = toggle.closest('.header-row');
-  const on     = toggle.classList.contains('toggle-on');
-  toggle.classList.toggle('toggle-on',  !on);
-  toggle.classList.toggle('toggle-off',  on);
-  row.classList.toggle('header-row-disabled', !on);
-  markDirty();
+// ── Landing page header preview ──
+function syncHeaderPreview() {
+  const greetingVal = document.getElementById('input-greeting').value.trim();
+  const progressVal = document.getElementById('input-progress').value.trim();
+  const streakVal   = document.getElementById('input-streak').value.trim();
+
+  const greetingEl = document.getElementById('phone-greeting');
+  greetingEl.textContent = greetingVal ? greetingVal.replace('{Name}', 'Emily') : '';
+  greetingEl.style.display = greetingVal ? '' : 'none';
+
+  const parts = [];
+  if (progressVal) parts.push(progressVal.replace('{#}', String(doneTasks)).replace('{total}', String(TOTAL)));
+  if (streakVal) parts.push(streakVal.replace('{streak}', '14'));
+  const subEl = document.getElementById('today-sub');
+  subEl.textContent = parts.join(' · ');
+  subEl.style.display = parts.length ? '' : 'none';
 }
 
 // ── Auth method selection ──
@@ -2078,13 +1947,15 @@ function selectCategory(key) {
 }
 
 // ── Admin toggle ──
+const INT_BADGES = new Set(['b-jira','b-gcal','b-apple','b-ghealth','b-garmin','b-fitbit']);
 function adminToggle(toggle, badgeId) {
-  const badge = document.getElementById(badgeId);
-  const on    = toggle.classList.contains('toggle-on');
+  const badge    = document.getElementById(badgeId);
+  const on       = toggle.classList.contains('toggle-on');
+  const useOnOff = INT_BADGES.has(badgeId);
   toggle.classList.toggle('toggle-on',  !on);
   toggle.classList.toggle('toggle-off',  on);
   badge.className   = on ? 'badge badge-gray' : 'badge badge-blue';
-  badge.textContent = on ? 'Disabled'         : 'Enabled';
+  badge.textContent = on ? (useOnOff ? 'Off' : 'Disabled') : (useOnOff ? 'On' : 'Enabled');
   markDirty();
 }
 
@@ -2112,22 +1983,6 @@ function notifModeSwitch(mode) {
   markDirty();
 }
 
-function toggleReminder() {
-  const toggle = document.getElementById('toggle-reminder');
-  const fields = document.getElementById('reminder-fields');
-  const on = toggle.classList.contains('toggle-on');
-  toggle.classList.toggle('toggle-on', !on);
-  toggle.classList.toggle('toggle-off', on);
-  fields.style.display = on ? 'none' : 'block';
-}
-
-function remModeSwitch(mode) {
-  const isTime = mode === 'time';
-  document.getElementById('rem-tab-time').classList.toggle('active', isTime);
-  document.getElementById('rem-tab-before').classList.toggle('active', !isTime);
-  document.getElementById('rem-mode-time').style.display   = isTime ? '' : 'none';
-  document.getElementById('rem-mode-before').style.display = isTime ? 'none' : '';
-}
 
 const NOTIF_SAMPLE = { '{firstName}': 'Emily', '{taskName}': '30-min walk', '{appName}': 'Task It' };
 
@@ -2171,6 +2026,7 @@ function showToast(msg) {
 renderUserRewards();
 renderAdminCatalog();
 notifPreviewUpdate();
+syncHeaderPreview();
 
 document.getElementById('view-admin').addEventListener('input', markDirty);
 document.getElementById('view-admin').addEventListener('change', markDirty);
