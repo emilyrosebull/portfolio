@@ -14,13 +14,20 @@ theme:
     - toc.integrate
     - search.suggest
 
+extra_css:
+  - stylesheets/extra.css
+
 nav:
   - Home: index.md
   - Portfolio: portfolio.md
   - About: about.md
+  - Task It:
+    - Overview: task-it/overview.md
+    - Configuration guide: task-it/configuration-guide.md
 
 markdown_extensions:
   - attr_list
   - admonition
   - pymdownx.details
   - pymdownx.superfences
+  - md_in_html
