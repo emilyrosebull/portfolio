@@ -1,0 +1,1298 @@
+openapi: 3.0.3
+info:
+  title: Task It API
+  version: 1.0.0
+  description: ''
+
+servers:
+  - url: https://api.trackit.io/v1
+
+security:
+  - bearerAuth: []
+
+tags:
+  - name: Organization
+  - name: Auth
+  - name: Branding
+  - name: Integrations
+  - name: Rewards
+  - name: Landing page
+  - name: Task creation
+  - name: Users
+  - name: Tasks
+  - name: Goals
+  - name: Points
+  - name: Notifications
+
+paths:
+
+  /organizations/{orgId}:
+    parameters:
+      - $ref: '#/components/parameters/orgId'
+    get:
+      operationId: getOrganization
+      summary: ''
+      tags: [Organization]
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+    patch:
+      operationId: updateOrganization
+      summary: ''
+      tags: [Organization]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationUpdate'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+
+  /organizations/{orgId}/auth:
+    parameters:
+      - $ref: '#/components/parameters/orgId'
+    get:
+      operationId: getAuthConfig
+      summary: ''
+      tags: [Auth]
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthConfig'
+    patch:
+      operationId: updateAuthConfig
+      summary: ''
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthConfigUpdate'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthConfig'
+
+  /organizations/{orgId}/branding:
+    parameters:
+      - $ref: '#/components/parameters/orgId'
+    get:
+      operationId: getBranding
+      summary: ''
+      tags: [Branding]
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Branding'
+    patch:
+      operationId: updateBranding
+      summary: ''
+      tags: [Branding]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BrandingUpdate'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Branding'
+
+  /organizations/{orgId}/integrations:
+    parameters:
+      - $ref: '#/components/parameters/orgId'
+    get:
+      operationId: getIntegrationSettings
+      summary: ''
+      tags: [Integrations]
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IntegrationSettings'
+    patch:
+      operationId: updateIntegrationSettings
+      summary: ''
+      tags: [Integrations]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IntegrationSettingsUpdate'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IntegrationSettings'
+
+  /organizations/{orgId}/rewards/config:
+    parameters:
+      - $ref: '#/components/parameters/orgId'
+    get:
+      operationId: getRewardsConfig
+      summary: ''
+      tags: [Rewards]
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RewardsConfig'
+    patch:
+      operationId: updateRewardsConfig
+      summary: ''
+      tags: [Rewards]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RewardsConfigUpdate'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RewardsConfig'
+
+  /organizations/{orgId}/rewards/catalog:
+    parameters:
+      - $ref: '#/components/parameters/orgId'
+    get:
+      operationId: listRewards
+      summary: ''
+      tags: [Rewards]
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Reward'
+    post:
+      operationId: createReward
+      summary: ''
+      tags: [Rewards]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RewardCreate'
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reward'
+
+  /organizations/{orgId}/rewards/catalog/{rewardId}:
+    parameters:
+      - $ref: '#/components/parameters/orgId'
+      - $ref: '#/components/parameters/rewardId'
+    patch:
+      operationId: updateReward
+      summary: ''
+      tags: [Rewards]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RewardUpdate'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reward'
+    delete:
+      operationId: deleteReward
+      summary: ''
+      tags: [Rewards]
+      responses:
+        '204':
+          description: ''
+
+  /organizations/{orgId}/landing-page:
+    parameters:
+      - $ref: '#/components/parameters/orgId'
+    get:
+      operationId: getLandingPage
+      summary: ''
+      tags: [Landing page]
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LandingPage'
+    patch:
+      operationId: updateLandingPage
+      summary: ''
+      tags: [Landing page]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LandingPageUpdate'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LandingPage'
+
+  /organizations/{orgId}/task-creation:
+    parameters:
+      - $ref: '#/components/parameters/orgId'
+    get:
+      operationId: getTaskCreationConfig
+      summary: ''
+      tags: [Task creation]
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskCreationConfig'
+    patch:
+      operationId: updateTaskCreationConfig
+      summary: ''
+      tags: [Task creation]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskCreationConfigUpdate'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskCreationConfig'
+
+  /organizations/{orgId}/notifications:
+    parameters:
+      - $ref: '#/components/parameters/orgId'
+    get:
+      operationId: getNotificationsConfig
+      summary: ''
+      tags: [Notifications]
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationsConfig'
+    patch:
+      operationId: updateNotificationsConfig
+      summary: ''
+      tags: [Notifications]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NotificationsConfigUpdate'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationsConfig'
+
+  /organizations/{orgId}/users:
+    parameters:
+      - $ref: '#/components/parameters/orgId'
+    get:
+      operationId: listUsers
+      summary: ''
+      tags: [Users]
+      parameters:
+        - name: department
+          in: query
+          schema:
+            type: string
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 50
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+                  total:
+                    type: integer
+
+  /organizations/{orgId}/users/{userId}:
+    parameters:
+      - $ref: '#/components/parameters/orgId'
+      - $ref: '#/components/parameters/userId'
+    get:
+      operationId: getUser
+      summary: ''
+      tags: [Users]
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  /users/{userId}/tasks:
+    parameters:
+      - $ref: '#/components/parameters/userId'
+    get:
+      operationId: listTasks
+      summary: ''
+      tags: [Tasks]
+      parameters:
+        - name: date
+          in: query
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Task'
+    post:
+      operationId: createTask
+      summary: ''
+      tags: [Tasks]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskCreate'
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+
+  /users/{userId}/tasks/{taskId}:
+    parameters:
+      - $ref: '#/components/parameters/userId'
+      - $ref: '#/components/parameters/taskId'
+    patch:
+      operationId: updateTask
+      summary: ''
+      tags: [Tasks]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskUpdate'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+    delete:
+      operationId: deleteTask
+      summary: ''
+      tags: [Tasks]
+      responses:
+        '204':
+          description: ''
+
+  /users/{userId}/tasks/{taskId}/complete:
+    parameters:
+      - $ref: '#/components/parameters/userId'
+      - $ref: '#/components/parameters/taskId'
+    post:
+      operationId: completeTask
+      summary: ''
+      tags: [Tasks]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                completedAt:
+                  type: string
+                  format: date-time
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+
+  /users/{userId}/goals:
+    parameters:
+      - $ref: '#/components/parameters/userId'
+    get:
+      operationId: listGoals
+      summary: ''
+      tags: [Goals]
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Goal'
+    post:
+      operationId: createGoal
+      summary: ''
+      tags: [Goals]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GoalCreate'
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Goal'
+
+  /users/{userId}/goals/{goalId}:
+    parameters:
+      - $ref: '#/components/parameters/userId'
+      - $ref: '#/components/parameters/goalId'
+    patch:
+      operationId: updateGoal
+      summary: ''
+      tags: [Goals]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GoalUpdate'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Goal'
+    delete:
+      operationId: deleteGoal
+      summary: ''
+      tags: [Goals]
+      responses:
+        '204':
+          description: ''
+
+  /users/{userId}/points:
+    parameters:
+      - $ref: '#/components/parameters/userId'
+    get:
+      operationId: getPoints
+      summary: ''
+      tags: [Points]
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PointsBalance'
+
+  /users/{userId}/points/redeem:
+    parameters:
+      - $ref: '#/components/parameters/userId'
+    post:
+      operationId: redeemPoints
+      summary: ''
+      tags: [Points]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [rewardId]
+              properties:
+                rewardId:
+                  type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PointsBalance'
+
+  /users/{userId}/integrations:
+    parameters:
+      - $ref: '#/components/parameters/userId'
+    get:
+      operationId: listUserIntegrations
+      summary: ''
+      tags: [Integrations]
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserIntegration'
+
+  /users/{userId}/integrations/{integrationId}:
+    parameters:
+      - $ref: '#/components/parameters/userId'
+      - name: integrationId
+        in: path
+        required: true
+        schema:
+          type: string
+          enum: [jira, gcal, apple-health, google-health, garmin, fitbit]
+    post:
+      operationId: connectIntegration
+      summary: ''
+      tags: [Integrations]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                authCode:
+                  type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserIntegration'
+    delete:
+      operationId: disconnectIntegration
+      summary: ''
+      tags: [Integrations]
+      responses:
+        '204':
+          description: ''
+
+components:
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  parameters:
+    orgId:
+      name: orgId
+      in: path
+      required: true
+      schema:
+        type: string
+    userId:
+      name: userId
+      in: path
+      required: true
+      schema:
+        type: string
+    taskId:
+      name: taskId
+      in: path
+      required: true
+      schema:
+        type: string
+    goalId:
+      name: goalId
+      in: path
+      required: true
+      schema:
+        type: string
+    rewardId:
+      name: rewardId
+      in: path
+      required: true
+      schema:
+        type: string
+
+  schemas:
+
+    Organization:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        industry:
+          type: string
+          enum: [technology, healthcare, finance, retail, education]
+        size:
+          type: string
+          enum: ['1-50', '51-200', '201-500', '501-2000', '2001+']
+        defaultLocale:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+
+    OrganizationUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        industry:
+          type: string
+          enum: [technology, healthcare, finance, retail, education]
+        size:
+          type: string
+          enum: ['1-50', '51-200', '201-500', '501-2000', '2001+']
+        defaultLocale:
+          type: string
+
+    SsoConfig:
+      type: object
+      properties:
+        protocol:
+          type: string
+          enum: [saml2, oidc]
+        idpUrl:
+          type: string
+          format: uri
+        entityId:
+          type: string
+
+    AuthConfig:
+      type: object
+      properties:
+        method:
+          type: string
+          enum: [taskit, sso]
+        sso:
+          $ref: '#/components/schemas/SsoConfig'
+          nullable: true
+        sessionTimeout:
+          type: string
+          enum: [30m, 1h, 4h, 8h]
+
+    AuthConfigUpdate:
+      type: object
+      properties:
+        method:
+          type: string
+          enum: [taskit, sso]
+        sso:
+          $ref: '#/components/schemas/SsoConfig'
+          nullable: true
+        sessionTimeout:
+          type: string
+          enum: [30m, 1h, 4h, 8h]
+
+    Branding:
+      type: object
+      properties:
+        logoUrl:
+          type: string
+          format: uri
+        primaryColor:
+          type: string
+        accentColor:
+          type: string
+        appNameOverride:
+          type: string
+          nullable: true
+
+    BrandingUpdate:
+      type: object
+      properties:
+        logoUrl:
+          type: string
+          format: uri
+        primaryColor:
+          type: string
+        accentColor:
+          type: string
+        appNameOverride:
+          type: string
+          nullable: true
+
+    IntegrationConfig:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+
+    IntegrationSettings:
+      type: object
+      properties:
+        pageHeader:
+          type: object
+          properties:
+            heading:
+              type: string
+            description:
+              type: string
+        jira:
+          $ref: '#/components/schemas/IntegrationConfig'
+        gcal:
+          $ref: '#/components/schemas/IntegrationConfig'
+        appleHealth:
+          $ref: '#/components/schemas/IntegrationConfig'
+        googleHealth:
+          $ref: '#/components/schemas/IntegrationConfig'
+        garmin:
+          $ref: '#/components/schemas/IntegrationConfig'
+        fitbit:
+          $ref: '#/components/schemas/IntegrationConfig'
+
+    IntegrationSettingsUpdate:
+      type: object
+      properties:
+        pageHeader:
+          type: object
+          properties:
+            heading:
+              type: string
+            description:
+              type: string
+        jira:
+          $ref: '#/components/schemas/IntegrationConfig'
+        gcal:
+          $ref: '#/components/schemas/IntegrationConfig'
+        appleHealth:
+          $ref: '#/components/schemas/IntegrationConfig'
+        googleHealth:
+          $ref: '#/components/schemas/IntegrationConfig'
+        garmin:
+          $ref: '#/components/schemas/IntegrationConfig'
+        fitbit:
+          $ref: '#/components/schemas/IntegrationConfig'
+
+    PointsByCategory:
+      type: object
+      properties:
+        work:
+          type: object
+          properties:
+            perTask:
+              type: integer
+            perGoal:
+              type: integer
+        personal:
+          type: object
+          properties:
+            perTask:
+              type: integer
+            perGoal:
+              type: integer
+        health:
+          type: object
+          properties:
+            perTask:
+              type: integer
+            perGoal:
+              type: integer
+
+    RewardsConfig:
+      type: object
+      properties:
+        label:
+          type: string
+        sectionHeading:
+          type: string
+        buttonCopy:
+          type: object
+          properties:
+            idle:
+              type: string
+            redeemed:
+              type: string
+            insufficientBalance:
+              type: string
+        pointsByCategory:
+          $ref: '#/components/schemas/PointsByCategory'
+
+    RewardsConfigUpdate:
+      type: object
+      properties:
+        label:
+          type: string
+        sectionHeading:
+          type: string
+        buttonCopy:
+          type: object
+          properties:
+            idle:
+              type: string
+            redeemed:
+              type: string
+            insufficientBalance:
+              type: string
+        pointsByCategory:
+          $ref: '#/components/schemas/PointsByCategory'
+
+    Reward:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        cost:
+          type: integer
+          minimum: 0
+        icon:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+
+    RewardCreate:
+      type: object
+      required: [name, cost]
+      properties:
+        name:
+          type: string
+        cost:
+          type: integer
+          minimum: 0
+        icon:
+          type: string
+
+    RewardUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        cost:
+          type: integer
+          minimum: 0
+        icon:
+          type: string
+
+    LandingPage:
+      type: object
+      properties:
+        streaks:
+          type: boolean
+          description: Whether to show consecutive-day activity streaks in the employee app header and stats.
+        header:
+          type: object
+          properties:
+            greeting:
+              type: object
+              properties:
+                enabled:
+                  type: boolean
+                template:
+                  type: string
+            progress:
+              type: object
+              properties:
+                enabled:
+                  type: boolean
+                template:
+                  type: string
+            streak:
+              type: object
+              properties:
+                enabled:
+                  type: boolean
+                template:
+                  type: string
+        categoryGrouping:
+          type: string
+          enum: [none, time, theme]
+
+    LandingPageUpdate:
+      type: object
+      properties:
+        streaks:
+          type: boolean
+        header:
+          type: object
+          properties:
+            greeting:
+              type: object
+              properties:
+                enabled:
+                  type: boolean
+                template:
+                  type: string
+            progress:
+              type: object
+              properties:
+                enabled:
+                  type: boolean
+                template:
+                  type: string
+            streak:
+              type: object
+              properties:
+                enabled:
+                  type: boolean
+                template:
+                  type: string
+        categoryGrouping:
+          type: string
+          enum: [none, time, theme]
+
+    TaskCreationConfig:
+      type: object
+      properties:
+        heading:
+          type: string
+          description: Title shown at the top of the task creation sheet. Defaults to "Add a task".
+        sectionHeadings:
+          type: object
+          properties:
+            taskName:
+              type: string
+              description: Label shown above the task name input. Defaults to "Task name".
+            category:
+              type: string
+              description: Label shown above the category dropdown. Defaults to "Category".
+            recurrence:
+              type: string
+              description: Label shown above the recurrence dropdown. Defaults to "Recurrence".
+            linkToGoal:
+              type: string
+              description: Label shown next to the goal link toggle. Defaults to "Link to a goal".
+        placeholders:
+          type: object
+          properties:
+            taskName:
+              type: string
+              description: Placeholder text shown in the task name input. Defaults to "e.g. Drink 8 glasses of water".
+            goalName:
+              type: string
+              description: Placeholder text shown in the goal name input. Defaults to "Goal name, e.g. Run a 5K".
+        ctaCopy:
+          type: string
+          description: Text shown on the primary button that submits the new task. Defaults to "Add task".
+        maxTasksPerUser:
+          type: integer
+          minimum: 1
+          nullable: true
+          description: Maximum number of tasks a user can create. Null means no limit.
+
+    TaskCreationConfigUpdate:
+      type: object
+      properties:
+        heading:
+          type: string
+        sectionHeadings:
+          type: object
+          properties:
+            taskName:
+              type: string
+            category:
+              type: string
+            recurrence:
+              type: string
+            linkToGoal:
+              type: string
+        placeholders:
+          type: object
+          properties:
+            taskName:
+              type: string
+            goalName:
+              type: string
+        ctaCopy:
+          type: string
+        maxTasksPerUser:
+          type: integer
+          minimum: 1
+          nullable: true
+
+    NotificationsConfig:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: Whether push notifications are enabled for the organization.
+        timing:
+          type: object
+          properties:
+            type:
+              type: string
+              enum: [before_due, end_of_day, custom]
+              description: "before_due fires the notification before the task's due time. end_of_day fires once at a fixed evening time. custom fires at a time set by the admin."
+            minutesBefore:
+              type: integer
+              enum: [30, 60, 120, 1440]
+              nullable: true
+              description: Minutes before the task is due. Only applies when type is "before_due".
+            scheduledTime:
+              type: string
+              pattern: '^([01]\d|2[0-3]):[0-5]\d$'
+              nullable: true
+              description: Time of day in HH:MM (24h) format. Only applies when type is "end_of_day" or "custom".
+        templates:
+          type: object
+          properties:
+            title:
+              type: string
+              description: Notification title. Supports {firstName}, {taskName}, and {appName} variables.
+            body:
+              type: string
+              description: Notification body. Supports {firstName}, {taskName}, and {appName} variables.
+
+    NotificationsConfigUpdate:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        timing:
+          type: object
+          properties:
+            type:
+              type: string
+              enum: [before_due, end_of_day, custom]
+            minutesBefore:
+              type: integer
+              enum: [30, 60, 120, 1440]
+              nullable: true
+            scheduledTime:
+              type: string
+              pattern: '^([01]\d|2[0-3]):[0-5]\d$'
+              nullable: true
+        templates:
+          type: object
+          properties:
+            title:
+              type: string
+            body:
+              type: string
+
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        department:
+          type: string
+        pointsBalance:
+          type: integer
+        goalsCompleted:
+          type: integer
+        currentStreak:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+
+    Task:
+      type: object
+      properties:
+        id:
+          type: string
+        userId:
+          type: string
+        name:
+          type: string
+        category:
+          type: string
+          enum: [work, personal, health]
+        recurrence:
+          type: string
+          enum: [daily, weekly, none]
+        points:
+          type: integer
+        goalId:
+          type: string
+          nullable: true
+        completedAt:
+          type: string
+          format: date-time
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+
+    TaskCreate:
+      type: object
+      required: [name, category]
+      properties:
+        name:
+          type: string
+        category:
+          type: string
+          enum: [work, personal, health]
+        recurrence:
+          type: string
+          enum: [daily, weekly, none]
+          default: daily
+        goalId:
+          type: string
+
+    TaskUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        category:
+          type: string
+          enum: [work, personal, health]
+        recurrence:
+          type: string
+          enum: [daily, weekly, none]
+        goalId:
+          type: string
+          nullable: true
+
+    Goal:
+      type: object
+      properties:
+        id:
+          type: string
+        userId:
+          type: string
+        name:
+          type: string
+        category:
+          type: string
+          enum: [work, personal, health]
+        targetDate:
+          type: string
+          format: date
+          nullable: true
+        progress:
+          type: number
+          minimum: 0
+          maximum: 1
+        createdAt:
+          type: string
+          format: date-time
+
+    GoalCreate:
+      type: object
+      required: [name, category]
+      properties:
+        name:
+          type: string
+        category:
+          type: string
+          enum: [work, personal, health]
+        targetDate:
+          type: string
+          format: date
+
+    GoalUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        category:
+          type: string
+          enum: [work, personal, health]
+        targetDate:
+          type: string
+          format: date
+          nullable: true
+
+    PointsBalance:
+      type: object
+      properties:
+        userId:
+          type: string
+        balance:
+          type: integer
+        lifetimeEarned:
+          type: integer
+        lifetimeRedeemed:
+          type: integer
+
+    UserIntegration:
+      type: object
+      properties:
+        integrationId:
+          type: string
+          enum: [jira, gcal, apple-health, google-health, garmin, fitbit]
+        connected:
+          type: boolean
+        connectedAt:
+          type: string
+          format: date-time
+          nullable: true
