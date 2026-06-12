@@ -30,12 +30,12 @@ Task It includes the following customizable features:
 
 | **Feature** | **Description** |
 | --- | --- |
-| Authentication <span class="badge badge-required">required</span> | Set up your preferred identity provider (IdP), choose an authentication protocol, and optionally set up Single Sign-On (SSO) to protect user data. |
-| Landing page <span class="badge badge-required">required</span> | The main screen displaying a user's in-progress tasks, goals, and rewards. |
-| Task creation <span class="badge badge-required">required</span> | The flow that guides users through creating a new task and setting details such as name, category, and recurrence rules. Users can also connect a task to an ongoing, time-bound goal. |
+| Authentication<br><span class="badge badge-required">required</span> | Set up your preferred identity provider (IdP), choose an authentication protocol, and optionally set up Single Sign-On (SSO) to protect user data. |
+| Landing page<br><span class="badge badge-required">required</span> | The main screen displaying a user's in-progress tasks, goals, and rewards. |
+| Task creation<br><span class="badge badge-required">required</span> | The flow that guides users through creating a new task and setting details such as name, category, and recurrence rules. Users can also connect a task to an ongoing, time-bound goal. |
 | Rewards<br><span class="badge badge-required">required</span> | Users earn rewards (such as points) for completing tasks, and redeem their rewards for tangible incentives. |
-| Integrations <span class="badge badge-optional">optional</span> | Allow users to sync Task It with with Google Calendar, Jira, and wearable devices for automatic task syncing and completion. |
-| Notifications <span class="badge badge-optional">optional</span> | You can configure push notifications that remind users to complete upcoming tasks. |
+| Integrations<br><span class="badge badge-optional">optional</span> | Allow users to sync Task It with with Google Calendar, Jira, and wearable devices for automatic task syncing and completion. |
+| Notifications<br><span class="badge badge-optional">optional</span> | You can configure push notifications that remind users to complete upcoming tasks. |
 
 ## Frequently Asked Questions
 
