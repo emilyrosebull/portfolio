@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: Task It API
   version: 1.0.0
-  description: ''
+  description: 'The Task It API sends data between the Task It application and admin console.'
 
 servers:
   - url: https://api.trackit.io/v1
@@ -11,9 +11,7 @@ security:
   - bearerAuth: []
 
 tags:
-  - name: Organization
   - name: Auth
-  - name: Branding
   - name: Integrations
   - name: Rewards
   - name: Landing page
@@ -26,55 +24,23 @@ tags:
 
 paths:
 
-  /organizations/{orgId}:
-    parameters:
-      - $ref: '#/components/parameters/orgId'
-    get:
-      operationId: getOrganization
-      summary: ''
-      tags: [Organization]
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Organization'
-    patch:
-      operationId: updateOrganization
-      summary: ''
-      tags: [Organization]
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/OrganizationUpdate'
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Organization'
-
   /organizations/{orgId}/auth:
     parameters:
       - $ref: '#/components/parameters/orgId'
     get:
       operationId: getAuthConfig
-      summary: ''
+      summary: 'Retrieve authentication configuration'
       tags: [Auth]
       responses:
         '200':
-          description: ''
+          description: 'Retrieves your existing authentication configuration from the API and loads it to the admin console.'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/AuthConfig'
     patch:
       operationId: updateAuthConfig
-      summary: ''
+      summary: 'Update authentication configuration'
       tags: [Auth]
       requestBody:
         required: true
@@ -84,61 +50,29 @@ paths:
               $ref: '#/components/schemas/AuthConfigUpdate'
       responses:
         '200':
-          description: ''
+          description: 'Updates your authentication configuration in the API when you save changes in the admin console.'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/AuthConfig'
-
-  /organizations/{orgId}/branding:
-    parameters:
-      - $ref: '#/components/parameters/orgId'
-    get:
-      operationId: getBranding
-      summary: ''
-      tags: [Branding]
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Branding'
-    patch:
-      operationId: updateBranding
-      summary: ''
-      tags: [Branding]
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/BrandingUpdate'
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Branding'
 
   /organizations/{orgId}/integrations:
     parameters:
       - $ref: '#/components/parameters/orgId'
     get:
       operationId: getIntegrationSettings
-      summary: ''
+      summary: 'Retrieve integration configuration'
       tags: [Integrations]
       responses:
         '200':
-          description: ''
+          description: 'Retrieves your existing integration configuration from the API and loads it to the admin console.'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/IntegrationSettings'
     patch:
       operationId: updateIntegrationSettings
-      summary: ''
+      summary: 'Update integration configuration'
       tags: [Integrations]
       requestBody:
         required: true
@@ -148,7 +82,7 @@ paths:
               $ref: '#/components/schemas/IntegrationSettingsUpdate'
       responses:
         '200':
-          description: ''
+          description: 'Updates your integration configuration in the API when you save changes in the admin console.'
           content:
             application/json:
               schema:
@@ -159,18 +93,18 @@ paths:
       - $ref: '#/components/parameters/orgId'
     get:
       operationId: getRewardsConfig
-      summary: ''
+      summary: 'Retrieve rewards settings'
       tags: [Rewards]
       responses:
         '200':
-          description: ''
+          description: 'Retrieves your existing rewards settings from the API, such as type (ex. points) and value (ex. 100 points), and loads it to the admin console.'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/RewardsConfig'
     patch:
       operationId: updateRewardsConfig
-      summary: ''
+      summary: 'Update rewards settings'
       tags: [Rewards]
       requestBody:
         required: true
@@ -180,7 +114,7 @@ paths:
               $ref: '#/components/schemas/RewardsConfigUpdate'
       responses:
         '200':
-          description: ''
+          description: 'Updates your rewards settings in the API when you save changes in the admin console.'
           content:
             application/json:
               schema:
@@ -191,11 +125,11 @@ paths:
       - $ref: '#/components/parameters/orgId'
     get:
       operationId: listRewards
-      summary: ''
+      summary: 'Retrieve rewards incentives'
       tags: [Rewards]
       responses:
         '200':
-          description: ''
+          description: 'Retrieves your existing list of rewards incentives (such as premium deductions or gift cards) from the API and loads it to the admin console.'
           content:
             application/json:
               schema:
@@ -204,7 +138,7 @@ paths:
                   $ref: '#/components/schemas/Reward'
     post:
       operationId: createReward
-      summary: ''
+      summary: 'Create a new rewards incentive'
       tags: [Rewards]
       requestBody:
         required: true
@@ -214,7 +148,7 @@ paths:
               $ref: '#/components/schemas/RewardCreate'
       responses:
         '201':
-          description: ''
+          description: 'Creates a new rewards incentive in the API when you add a reward in the admin console.'
           content:
             application/json:
               schema:
@@ -226,7 +160,7 @@ paths:
       - $ref: '#/components/parameters/rewardId'
     patch:
       operationId: updateReward
-      summary: ''
+      summary: 'Update a rewards incentive'
       tags: [Rewards]
       requestBody:
         required: true
@@ -236,18 +170,18 @@ paths:
               $ref: '#/components/schemas/RewardUpdate'
       responses:
         '200':
-          description: ''
+          description: 'Updates a rewards incentive in the API when you edit an existing reward and save changes in the admin console.'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Reward'
     delete:
       operationId: deleteReward
-      summary: ''
+      summary: 'Delete a rewards incentive'
       tags: [Rewards]
       responses:
         '204':
-          description: ''
+          description: 'Deletes a rewards incentive in the API when you delete a reward in the admin console.'
 
   /organizations/{orgId}/landing-page:
     parameters:
